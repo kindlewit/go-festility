@@ -1,9 +1,10 @@
-Fest Slotter
+Festility
 =
 
 ## Run locally
 `GOPATH=$PWD/bin` - ensures all downloaded packages are present within this project folder.
-GOROOT=go/installed/dir
+
+`GOROOT=go/installed/dir`
 
 ```
 go build
@@ -28,10 +29,10 @@ docker build -t festility .
 docker run -it -p 8080:8080 festility
 </pre>
 
--Thanks from the future
-https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/go-buildfile.html
-https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/java-se-procfile.html
-https://www.youtube.com/watch?v=5GINgmS93Mc
+You're welcome, future me.
+- https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/go-buildfile.html
+- https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/java-se-procfile.html
+- https://www.youtube.com/watch?v=5GINgmS93Mc
 
 ## MongoDB docker
 ```
