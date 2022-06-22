@@ -1,0 +1,8 @@
+# ENV
+.env
+bin/*
+fest-slotter
+
+# SAMPLE DATA
+data/*
+
