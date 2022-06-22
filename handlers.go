@@ -12,7 +12,7 @@ import (
 func indexHandler(c *gin.Context) {
 	var response = gin.H{
 		"timestamp": time.Now().Unix(),
-		"data": "Welcome to fest-slotter!",
+		"data": "Welcome to festility!",
 	}
 
 	c.JSON(http.StatusOK, response);

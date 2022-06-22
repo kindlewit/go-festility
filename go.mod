@@ -1,4 +1,4 @@
-module fest-slotter
+module festility
 
 go 1.16
 
