@@ -2,6 +2,7 @@
 .env
 bin/*
 fest-slotter
+festility
 
 # SAMPLE DATA
 data/*
