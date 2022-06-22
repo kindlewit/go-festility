@@ -8,11 +8,11 @@ GOROOT=go/installed/dir
 ```
 go build
 ```
-will create a new file that's named after the module **fest-slotter**.
+will create a new file that's named after the module **festility**.
 
 
 ```
-go run fest-slotter
+go run festility
 # OR
 go run <package-name>
 ```
@@ -22,10 +22,10 @@ which should start the server
 Run the following in the root dir of the project
 <pre>
 # BUILD THE IMAGE
-docker build -t fest-slotter .
+docker build -t festility .
 
 # RUN THE CONTAINER
-docker run -it -p 8080:8080 fest-slotter
+docker run -it -p 8080:8080 festility
 </pre>
 
 -Thanks from the future
