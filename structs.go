@@ -61,3 +61,11 @@ type Crew struct {
 	Name		string		`json:"name"`
 	Job			string		`json:"job"`
 }
+
+type Fest struct {
+	Id			string		`json:"id"`
+	Name		string		`json:"name"`
+	From		int				`json:"from_date"`
+	To			int				`json:"to_date"`
+	Url			string		`json:"url"`
+}

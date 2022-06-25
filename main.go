@@ -11,5 +11,7 @@ func main() {
 	router.GET("/list/:id", moviesFromListHandler);
 	router.GET("/movies", readMovies);
 
+	router.GET("/fest/:id", getFestHandler);
+
 	router.Run(); // Start the server
 }

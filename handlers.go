@@ -18,7 +18,7 @@ func indexHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, response);
 }
 
-// Handles requests to get one movie.s
+// Handles requests to get one movie.
 func getMovieHandler(c *gin.Context) {
 	id := c.Param("id");
 
@@ -64,4 +64,16 @@ func readMovies(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp);
 	// c.Writer.WriteHeader(204);
+}
+
+// Handles request to get details of one festival.
+func getFestHandler(c *gin.Context) {
+	id := c.Param("id");
+
+	client := connect();
+
+	resp := getFest(client, mongo: no documents in result
+		id);
+
+	c.JSON(http.StatusOK, resp);
 }
