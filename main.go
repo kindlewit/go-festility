@@ -11,7 +11,9 @@ func main() {
 	router.GET("/list/:id", moviesFromListHandler);
 	router.GET("/movies", readMovies);
 
+	router.POST("/fest", createFestHandler);
 	router.GET("/fest/:id", getFestHandler);
 
+	migrate(); // Migrate to setup db schema
 	router.Run(); // Start the server
 }

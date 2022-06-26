@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	// "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // Connect to mongodb.
@@ -27,6 +27,25 @@ func connect() *mongo.Client {
 	}
 
 	return client; // Return mongo client
+}
+
+func migrate() bool {
+	client := connect();
+	collection := client.Database("festility").Collection("festival");
+
+	_, err := collection.Indexes().CreateOne(
+		context.Background(),
+		mongo.IndexModel{
+			Keys: bson.D{{ Key: "id", Value: 1 }},
+			Options: options.Index().SetUnique(true),
+		},
+	);
+
+	if err != nil {
+		return false;
+	}
+
+	return true;
 }
 
 // Bulk insert movie records into mongodb.
@@ -61,6 +80,8 @@ func allMovies(client *mongo.Client) []Movie {
 
 	var res []Movie;
 
+	// TODO: Add pagination
+
 	for cur.Next(ctx) { // Iterate cursor
 			var result Movie;
 
@@ -81,10 +102,18 @@ func allMovies(client *mongo.Client) []Movie {
 func createFest(client *mongo.Client, data Fest) string {
 	collection := client.Database("festility").Collection("festival"); // Collection to use
 
+	// Ensure no duplication
+	count, err := collection.CountDocuments(context.TODO(), bson.M{ "id": data.Id });
+	if err != nil {
+		panic(err);
+	}
+	if count > 0 {
+		return DuplicateRecord; // Record already present
+	}
+
 	result, err := collection.InsertOne(context.TODO(), data);
 	if err != nil {
 		panic(err);
-		return "";
 	}
 
 	return fmt.Sprintf("%v", result.InsertedID);
@@ -94,15 +123,10 @@ func createFest(client *mongo.Client, data Fest) string {
 func getFest(client *mongo.Client, id string) Fest {
 	collection := client.Database("festility").Collection("festival"); // Collection to use
 
-	objectId, err := primitive.ObjectIDFromHex(id);
-	if err != nil {
-		panic(err);
-	}
-
-	query := bson.M{ "_id": objectId };
+	query := bson.M{ "id": id };
 
 	var data Fest;
-	err = collection.FindOne(context.TODO(), query).Decode(&data); // Throwing mongo: no documents in result
+	err := collection.FindOne(context.TODO(), query).Decode(&data); // Throwing mongo: no documents in result
 	if err != nil {
 		panic(err);
 	}

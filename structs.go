@@ -63,9 +63,9 @@ type Crew struct {
 }
 
 type Fest struct {
-	Id			string		`json:"id"`
-	Name		string		`json:"name"`
-	From		int				`json:"from_date"`
-	To			int				`json:"to_date"`
-	Url			string		`json:"url"`
+	Id			string		`form:"id" json:"id" binding:"required"`
+	Name		string		`form:"name" json:"name" binding:"required"`
+	From		int				`form:"from_date" json:"from_date" binding:"required"`
+	To			int				`form:"to_date" json:"to_date" binding:"required"`
+	Url			string		`form:"url" json:"url"`
 }

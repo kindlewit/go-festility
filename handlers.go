@@ -66,14 +66,35 @@ func readMovies(c *gin.Context) {
 	// c.Writer.WriteHeader(204);
 }
 
+// Handles request to create one festival.
+func createFestHandler(c *gin.Context) {
+	var body Fest;
+
+	if err := c.BindJSON(&body); err != nil {
+		c.String(http.StatusBadRequest, "Required parameters missing: name/from_date/to_date.");
+		return;
+	}
+
+	client := connect();
+	festId := createFest(client, body);
+	if festId == "" {
+		c.String(http.StatusInternalServerError, "Unable to create record.");
+		return;
+	}
+	if festId == DuplicateRecord {
+		c.String(http.StatusConflict, "Request to create duplicate record.");
+		return;
+	}
+
+	c.JSON(http.StatusCreated, gin.H{ "id": body.Id });
+}
+
 // Handles request to get details of one festival.
 func getFestHandler(c *gin.Context) {
 	id := c.Param("id");
 
 	client := connect();
-
-	resp := getFest(client, mongo: no documents in result
-		id);
+	resp := getFest(client, id);
 
 	c.JSON(http.StatusOK, resp);
 }
