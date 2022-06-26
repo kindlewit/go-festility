@@ -1,0 +1,197 @@
+{
+	"version": 1,
+	"collections": [
+		{
+			"id": "3c57f913-e73a-4853-9369-fea35c54556f",
+			"uid": "0-3c57f913-e73a-4853-9369-fea35c54556f",
+			"name": "List",
+			"description": null,
+			"auth": null,
+			"events": null,
+			"variables": [],
+			"order": [
+				"5673f3ed-e02d-4604-a7f3-ef1ec4fb8a15"
+			],
+			"folders_order": [],
+			"protocolProfileBehavior": {},
+			"createdAt": "2022-06-26T11:32:59.568Z",
+			"folders": [],
+			"requests": [
+				{
+					"id": "5673f3ed-e02d-4604-a7f3-ef1ec4fb8a15",
+					"uid": "0-5673f3ed-e02d-4604-a7f3-ef1ec4fb8a15",
+					"name": "Get List of Movies",
+					"url": "http://localhost:8080/list/367",
+					"description": null,
+					"data": null,
+					"dataOptions": null,
+					"dataMode": null,
+					"headerData": null,
+					"method": "GET",
+					"pathVariableData": [],
+					"queryParams": [],
+					"auth": null,
+					"events": null,
+					"folder": null,
+					"responses_order": [],
+					"currentHelper": null,
+					"helperAttributes": null,
+					"collectionId": "3c57f913-e73a-4853-9369-fea35c54556f",
+					"pathVariables": {}
+				}
+			]
+		},
+		{
+			"id": "5c8e5229-dcae-4db2-a268-e08d9c6f4683",
+			"uid": "0-5c8e5229-dcae-4db2-a268-e08d9c6f4683",
+			"name": "Movie",
+			"description": null,
+			"auth": null,
+			"events": null,
+			"variables": [],
+			"order": [
+				"ea3c7953-8b78-4d51-94ca-de5e7dacce05",
+				"9177bf82-4cb7-44cd-97d4-81c38b1d4df4"
+			],
+			"folders_order": [],
+			"protocolProfileBehavior": {},
+			"createdAt": "2022-06-26T11:18:33.981Z",
+			"folders": [],
+			"requests": [
+				{
+					"id": "9177bf82-4cb7-44cd-97d4-81c38b1d4df4",
+					"uid": "0-9177bf82-4cb7-44cd-97d4-81c38b1d4df4",
+					"name": "Get Movie",
+					"url": "http://localhost:8080/movie/662286",
+					"description": null,
+					"data": null,
+					"dataOptions": null,
+					"dataMode": null,
+					"headerData": null,
+					"method": "GET",
+					"pathVariableData": [],
+					"queryParams": [],
+					"auth": null,
+					"events": null,
+					"folder": null,
+					"responses_order": [],
+					"currentHelper": null,
+					"helperAttributes": null,
+					"collectionId": "5c8e5229-dcae-4db2-a268-e08d9c6f4683",
+					"pathVariables": {}
+				},
+				{
+					"id": "ea3c7953-8b78-4d51-94ca-de5e7dacce05",
+					"uid": "0-ea3c7953-8b78-4d51-94ca-de5e7dacce05",
+					"name": "Get All Movies",
+					"url": "http://localhost:8080/movies",
+					"description": null,
+					"data": null,
+					"dataOptions": null,
+					"dataMode": null,
+					"headerData": null,
+					"method": "GET",
+					"pathVariableData": [],
+					"queryParams": [],
+					"auth": null,
+					"events": null,
+					"folder": null,
+					"responses_order": [],
+					"currentHelper": null,
+					"helperAttributes": null,
+					"collectionId": "5c8e5229-dcae-4db2-a268-e08d9c6f4683",
+					"pathVariables": {}
+				}
+			]
+		},
+		{
+			"id": "f79a19ad-6b9e-41fa-adfd-c62d7a36daa7",
+			"uid": "0-f79a19ad-6b9e-41fa-adfd-c62d7a36daa7",
+			"name": "Fest",
+			"description": null,
+			"auth": null,
+			"events": null,
+			"variables": [],
+			"order": [
+				"3796a67d-fddf-4496-865a-8a7855c3b3bf",
+				"cf6f3c2b-dc95-458d-9245-34ad98cc9ace"
+			],
+			"folders_order": [],
+			"protocolProfileBehavior": {},
+			"createdAt": "2022-06-26T05:46:46.701Z",
+			"folders": [],
+			"requests": [
+				{
+					"id": "3796a67d-fddf-4496-865a-8a7855c3b3bf",
+					"uid": "0-3796a67d-fddf-4496-865a-8a7855c3b3bf",
+					"name": "Create Fest",
+					"url": "http://localhost:8080/fest",
+					"description": null,
+					"data": [],
+					"dataOptions": {
+						"raw": {
+							"language": "json"
+						}
+					},
+					"dataMode": "raw",
+					"headerData": null,
+					"method": "POST",
+					"pathVariableData": [],
+					"queryParams": [],
+					"auth": null,
+					"events": null,
+					"folder": null,
+					"responses_order": [],
+					"currentHelper": null,
+					"helperAttributes": null,
+					"collectionId": "f79a19ad-6b9e-41fa-adfd-c62d7a36daa7",
+					"rawModeData": "{\n    \"id\": \"Fest2022\",\n    \"name\": \"Film Festival 2022\",\n    \"from_date\": 1656223288,\n    \"to_date\": 1656823288\n}",
+					"pathVariables": {}
+				},
+				{
+					"id": "cf6f3c2b-dc95-458d-9245-34ad98cc9ace",
+					"uid": "0-cf6f3c2b-dc95-458d-9245-34ad98cc9ace",
+					"name": "Get Fest",
+					"url": "http://localhost:8080/fest/Fest2022",
+					"description": null,
+					"data": null,
+					"dataOptions": null,
+					"dataMode": null,
+					"headerData": null,
+					"method": "GET",
+					"pathVariableData": [],
+					"queryParams": [],
+					"auth": null,
+					"events": null,
+					"folder": null,
+					"responses_order": [],
+					"currentHelper": null,
+					"helperAttributes": null,
+					"collectionId": "f79a19ad-6b9e-41fa-adfd-c62d7a36daa7",
+					"pathVariables": {}
+				}
+			]
+		}
+	],
+	"environments": [
+		{
+			"id": "5f351f71-10fb-4120-afee-1a885be44a5f",
+			"name": "DEV",
+			"values": [
+				{
+					"key": "url",
+					"value": "localhost:8000",
+					"type": "default",
+					"enabled": true
+				}
+			]
+		},
+		{
+			"id": "58d2fa5a-ea81-49fb-a6ad-39f72e4342ae",
+			"name": "My Workspace - globals",
+			"values": []
+		}
+	],
+	"headerPresets": [],
+	"globals": []
+}
