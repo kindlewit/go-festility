@@ -63,9 +63,35 @@ type Crew struct {
 }
 
 type Fest struct {
-	Id			string		`form:"id" json:"id" binding:"required"`
-	Name		string		`form:"name" json:"name" binding:"required"`
-	From		int				`form:"from_date" json:"from_date" binding:"required"`
-	To			int				`form:"to_date" json:"to_date" binding:"required"`
-	Url			string		`form:"url" json:"url"`
+	Id			string		`bson:"id" form:"id" json:"id" binding:"required"`
+	Name		string		`bson:"name" form:"name" json:"name" binding:"required"`
+	From		int				`bson:"from_date" form:"from_date" json:"from_date" binding:"required"`
+	To			int				`bson:"to_date" form:"to_date" json:"to_date" binding:"required"`
+	Url			string		`bson:"url" form:"url" json:"url"`
+}
+
+type Slot struct {
+	// Common for both
+	Id							string			`bson:"id" json:"id"`
+	Type						string			`bson:"slot_type" binding:"required" json:"slot_type" binding:"required"`
+	ScheduleID			string			`bson:"schedule_id" json:"schedule_id"`
+	Title						string			`bson:"title" json:"title"`
+	Synopsis				string			`bson:"synopsis" json:"synopsis"`
+	From						int					`bson:"from_date" json:"from_date"`
+	To							int					`bson:"to_date" json:"to_date"`
+	// Movie specific
+	Directors				[]string		`bson:"directors" json:"directors"`
+	OriginalTitle		string			`bson:"original_title" json:"original_title"`
+	Genres					[]string		`bson:"genres" json:"genres"`
+	Languages				[]Language	`bson:"languages" json:"languages"`
+	Countries				[]Country		`bson:"countries" json:"countries"`
+	Runtime					int					`bson:"runtime" json:"runtime"`
+	MovieId					int					`bson:"movie_id" json:"movie_id"`
+}
+
+type Schedule struct {
+	Id					string		`bson:"id" json:"id"`
+	Fest				string		`bson:"fest_id" json:"fest_id"`
+	Custom			bool			`bson:"custom" json:"custom"`
+	Username		string		`bson:"username" json:"username"`
 }
