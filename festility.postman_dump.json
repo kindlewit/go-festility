@@ -2,6 +2,101 @@
 	"version": 1,
 	"collections": [
 		{
+			"id": "25a07e54-4350-432f-b764-0a7f1e029592",
+			"uid": "0-25a07e54-4350-432f-b764-0a7f1e029592",
+			"name": "Schedule",
+			"description": null,
+			"auth": null,
+			"events": null,
+			"variables": [],
+			"order": [
+				"ceee8285-332c-4d64-ba6c-17c5fcf48959",
+				"34595488-806f-41a2-9390-3994e444a1ac"
+			],
+			"folders_order": [],
+			"protocolProfileBehavior": {},
+			"createdAt": "2022-06-26T15:28:34.147Z",
+			"folders": [],
+			"requests": [
+				{
+					"id": "34595488-806f-41a2-9390-3994e444a1ac",
+					"uid": "0-34595488-806f-41a2-9390-3994e444a1ac",
+					"name": "Get Schedule",
+					"url": "http://localhost:8080/fest/Fest2022/schedule/{{sid}}",
+					"description": null,
+					"data": null,
+					"dataOptions": null,
+					"dataMode": null,
+					"headerData": null,
+					"method": "GET",
+					"pathVariableData": [],
+					"queryParams": [],
+					"auth": null,
+					"events": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8c673c15-607b-4392-9e31-596f31ae391e",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"folder": null,
+					"responses_order": [],
+					"preRequestScript": null,
+					"tests": null,
+					"currentHelper": null,
+					"helperAttributes": null,
+					"collectionId": "25a07e54-4350-432f-b764-0a7f1e029592",
+					"pathVariables": {}
+				},
+				{
+					"id": "ceee8285-332c-4d64-ba6c-17c5fcf48959",
+					"uid": "0-ceee8285-332c-4d64-ba6c-17c5fcf48959",
+					"name": "Create Schedule",
+					"url": "http://localhost:8080/fest/Fest2022/schedule",
+					"description": null,
+					"data": [],
+					"dataOptions": {
+						"raw": {
+							"language": "json"
+						}
+					},
+					"dataMode": "raw",
+					"headerData": null,
+					"method": "POST",
+					"pathVariableData": [],
+					"queryParams": [],
+					"auth": null,
+					"events": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d42ed4aa-b9ff-4261-ae02-76fed7a743e2",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"sid\", jsonData.schedule_id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"folder": null,
+					"responses_order": [],
+					"preRequestScript": null,
+					"tests": "var jsonData = pm.response.json();\npm.globals.set(\"sid\", jsonData.schedule_id);",
+					"currentHelper": null,
+					"helperAttributes": null,
+					"collectionId": "25a07e54-4350-432f-b764-0a7f1e029592",
+					"rawModeData": "[\n  {\n    \"slot_type\": \"movie\",\n    \"movie_id\": 743563\n  },\n  {\n    \"slot_type\": \"movie\",\n    \"movie_id\": 587030\n  },\n  {\n    \"slot_type\": \"interview\",\n    \"title\": \"Baradwaj talks with Lokesh Kanagaraj\"\n  }\n]",
+					"pathVariables": {}
+				}
+			]
+		},
+		{
 			"id": "3c57f913-e73a-4853-9369-fea35c54556f",
 			"uid": "0-3c57f913-e73a-4853-9369-fea35c54556f",
 			"name": "List",
@@ -139,9 +234,23 @@
 					"pathVariableData": [],
 					"queryParams": [],
 					"auth": null,
-					"events": null,
+					"events": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e14bb368-1992-4575-ba0a-96538f5211ce",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"fid\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"folder": null,
 					"responses_order": [],
+					"preRequestScript": null,
+					"tests": "var jsonData = pm.response.json();\npm.globals.set(\"fid\", jsonData.id);",
 					"currentHelper": null,
 					"helperAttributes": null,
 					"collectionId": "f79a19ad-6b9e-41fa-adfd-c62d7a36daa7",
@@ -152,7 +261,7 @@
 					"id": "cf6f3c2b-dc95-458d-9245-34ad98cc9ace",
 					"uid": "0-cf6f3c2b-dc95-458d-9245-34ad98cc9ace",
 					"name": "Get Fest",
-					"url": "http://localhost:8080/fest/Fest2022",
+					"url": "http://localhost:8080/fest/{{fid}}",
 					"description": null,
 					"data": null,
 					"dataOptions": null,
@@ -187,9 +296,22 @@
 			]
 		},
 		{
-			"id": "58d2fa5a-ea81-49fb-a6ad-39f72e4342ae",
+			"id": "e90f833b-eb40-4802-9388-add63e94196c",
 			"name": "My Workspace - globals",
-			"values": []
+			"values": [
+				{
+					"key": "sid",
+					"value": "",
+					"type": "any",
+					"enabled": true
+				},
+				{
+					"key": "fid",
+					"value": "",
+					"type": "any",
+					"enabled": true
+				}
+			]
 		}
 	],
 	"headerPresets": [],
