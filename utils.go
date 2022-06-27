@@ -1,6 +1,10 @@
 package main
 
-import "strings"
+import (
+	"strings"
+	"crypto/rand"
+	"encoding/hex"
+)
 
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w300_and_h450_bestv2";
 
@@ -47,3 +51,14 @@ func reformat(doc *TMDBmovie, directors []string) Movie {
 	return resp;
 }
 
+func generateRandomHash(size int) string {
+	if size == 0 {
+		return "";
+	}
+
+	bytes := make([]byte, size);
+	if _, err := rand.Read(bytes); err != nil {
+		return "";
+	}
+	return hex.EncodeToString(bytes);
+}
