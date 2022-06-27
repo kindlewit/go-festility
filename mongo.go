@@ -9,7 +9,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/bson"
-	// "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // Connect to mongodb.
@@ -29,6 +28,16 @@ func connect() *mongo.Client {
 	return client; // Return mongo client
 }
 
+func disconnect(client *mongo.Client) {
+	if client == nil {
+		return;
+	}
+	err := client.Disconnect(context.Background());
+	if err != nil {
+		panic(err);
+	}
+}
+
 func migrate() bool {
 	client := connect();
 	collection := client.Database("festility").Collection("festival");
@@ -40,11 +49,7 @@ func migrate() bool {
 			Options: options.Index().SetUnique(true),
 		},
 	);
-
-	if err != nil {
-		return false;
-	}
-
+	if err != nil { return false; }
 	return true;
 }
 
@@ -53,7 +58,6 @@ func bulkInsertMovies(client *mongo.Client, movies []Movie) {
 	collection := client.Database("festility").Collection("movies"); // Collection to use
 
 	data := make([]interface{}, len(movies));
-
 	for i, m := range movies {
 		data[i] = m;
 	}
@@ -64,7 +68,7 @@ func bulkInsertMovies(client *mongo.Client, movies []Movie) {
 	}
 }
 
-// Fetch all movie documents in mongodb
+// Fetches all movie documents in mongodb
 func allMovies(client *mongo.Client) []Movie {
 	// Create context
 	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second);
@@ -73,9 +77,7 @@ func allMovies(client *mongo.Client) []Movie {
 	collection := client.Database("festility").Collection("movies"); // Collection to use
 
 	cur, err := collection.Find(ctx, bson.D{})
-
 	if err != nil { panic(err) }
-
 	defer cur.Close(ctx);
 
 	var res []Movie;
@@ -83,22 +85,21 @@ func allMovies(client *mongo.Client) []Movie {
 	// TODO: Add pagination
 
 	for cur.Next(ctx) { // Iterate cursor
-			var result Movie;
+		var result Movie;
 
-			err := cur.Decode(&result);
-			if err != nil { panic(err) }
+		err := cur.Decode(&result);
+		if err != nil { panic(err) }
 
-			res = append(res, result);
-			// do something with result....
+		res = append(res, result);
+		// do something with result....
 	}
 	if err := cur.Err(); err != nil {
-			panic(err);
+		panic(err);
 	}
-
 	return res; // Return document slice
 }
 
-// Creates new festival record & returns success.
+// Creates new festival record & returns inserted ID.
 func createFest(client *mongo.Client, data Fest) string {
 	collection := client.Database("festility").Collection("festival"); // Collection to use
 
@@ -115,21 +116,102 @@ func createFest(client *mongo.Client, data Fest) string {
 	if err != nil {
 		panic(err);
 	}
-
 	return fmt.Sprintf("%v", result.InsertedID);
 }
 
-// Fetches one festival record.
+// Fetches one festival record by fest id.
 func getFest(client *mongo.Client, id string) Fest {
 	collection := client.Database("festility").Collection("festival"); // Collection to use
 
 	query := bson.M{ "id": id };
 
 	var data Fest;
-	err := collection.FindOne(context.TODO(), query).Decode(&data); // Throwing mongo: no documents in result
+	err := collection.FindOne(context.TODO(),query).Decode(&data);
+	// Throwing mongo: no documents in error
 	if err != nil {
 		panic(err);
 	}
 
 	return data;
+}
+
+// Creates new slot records & returns success.
+func bulkCreateSlot(client *mongo.Client, slots []Slot) bool {
+	collection := client.Database("festility").Collection("slot"); // Collection to use
+	// data should already be sanitized
+	data := make([]interface{}, len(slots))
+	for i, s := range slots {
+		data[i] = s;
+	}
+
+	_, err := collection.InsertMany(context.TODO(), data);
+	if err != nil {
+		panic(err);
+		return false;
+	}
+	return true;
+}
+
+// Fetches all slots for a given schedule id.
+func getSlotsOfSchedule(client *mongo.Client, sid string) []Slot {
+	ctx, cancel := context.WithTimeout(context.TODO(), 30 * time.Second);
+	defer cancel();
+
+	collection := client.Database("festility").Collection("slot"); // Collection to use
+	query := bson.M{ "schedule_id": sid };
+
+	cur, err := collection.Find(ctx, query);
+	if err != nil { panic(err); }
+	defer cur.Close(ctx);
+
+	var docs []Slot; // Array
+
+	for cur.Next(ctx) { // Iterate cursor
+		var d Slot;
+
+		err := cur.Decode(&d); // Decode
+		if err != nil { panic(err); }
+		docs = append(docs, d); // Push into array
+	}
+	if err := cur.Err(); err != nil { panic(err); }
+
+	return docs;
+}
+
+// Creates new schedule from slots list.
+func createSchedule(client *mongo.Client, data Schedule) bool {
+	collection := client.Database("festility").Collection("schedule"); // Collection to use
+	_, err := collection.InsertOne(context.TODO(), data);
+	if err != nil {
+		panic(err);
+		return false;
+	}
+	return true;
+}
+
+// Fetches the schedule record by fest id & schedule id.
+func getSchedule(client *mongo.Client, fid string, sid string) Schedule {
+	collection := client.Database("festility").Collection("schedule"); // Collection to use
+	query := bson.M{ "id": sid, "fest_id": fid };
+
+	var doc Schedule;
+	err := collection.FindOne(context.TODO(), query).Decode(&doc);
+	if err != nil {
+		panic(err);
+		return Schedule{};
+	}
+
+	return doc;
+}
+
+// Checks if newId already exists in db.
+func ensureUniqueScheduleId(client *mongo.Client, newId string) bool {
+	collection := client.Database("festility").Collection("schedule"); // Collection to use
+	query := bson.M{ "id": newId }; // Docs with the same id
+	count, err := collection.CountDocuments(context.TODO(), query); // Count query
+	if err != nil {
+		panic(err);
+		return false;
+	}
+	return count < 1; // No docs under query
 }
