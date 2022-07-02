@@ -11,7 +11,8 @@
 			"variables": [],
 			"order": [
 				"ceee8285-332c-4d64-ba6c-17c5fcf48959",
-				"34595488-806f-41a2-9390-3994e444a1ac"
+				"34595488-806f-41a2-9390-3994e444a1ac",
+				"efe26a25-4005-41ce-929d-a7b3e89aacbf"
 			],
 			"folders_order": [],
 			"protocolProfileBehavior": {},
@@ -22,7 +23,7 @@
 					"id": "34595488-806f-41a2-9390-3994e444a1ac",
 					"uid": "0-34595488-806f-41a2-9390-3994e444a1ac",
 					"name": "Get Schedule",
-					"url": "http://localhost:8080/fest/Fest2022/schedule/{{sid}}",
+					"url": "http://localhost:8080/fest/{{fid}}/schedule/{{sid}}",
 					"description": null,
 					"data": null,
 					"dataOptions": null,
@@ -57,7 +58,7 @@
 					"id": "ceee8285-332c-4d64-ba6c-17c5fcf48959",
 					"uid": "0-ceee8285-332c-4d64-ba6c-17c5fcf48959",
 					"name": "Create Schedule",
-					"url": "http://localhost:8080/fest/Fest2022/schedule",
+					"url": "http://localhost:8080/fest/{{fid}}/schedule",
 					"description": null,
 					"data": [],
 					"dataOptions": {
@@ -91,7 +92,37 @@
 					"currentHelper": null,
 					"helperAttributes": null,
 					"collectionId": "25a07e54-4350-432f-b764-0a7f1e029592",
-					"rawModeData": "[\n  {\n    \"slot_type\": \"movie\",\n    \"movie_id\": 743563\n  },\n  {\n    \"slot_type\": \"movie\",\n    \"movie_id\": 587030\n  },\n  {\n    \"slot_type\": \"interview\",\n    \"title\": \"Baradwaj talks with Lokesh Kanagaraj\"\n  }\n]",
+					"rawModeData": "[\n  {\n    \"slot_type\": \"movie\",\n    \"movie_id\": 743563,\n    \"start_time\": 1639105200\n  },\n  {\n    \"slot_type\": \"movie\",\n    \"movie_id\": 587030,\n    \"start_time\": 1639128600\n  },\n  {\n    \"slot_type\": \"interview\",\n    \"title\": \"Baradwaj talks with Lokesh Kanagaraj\",\n    \"start_time\": 1639546200,\n    \"duration\": 120\n  }\n]",
+					"pathVariables": {}
+				},
+				{
+					"id": "efe26a25-4005-41ce-929d-a7b3e89aacbf",
+					"uid": "0-efe26a25-4005-41ce-929d-a7b3e89aacbf",
+					"name": "Get Default Schedule",
+					"url": "http://localhost:8080/fest/{{fid}}/schedule?date=2021-12-10",
+					"description": null,
+					"data": null,
+					"dataOptions": null,
+					"dataMode": null,
+					"headerData": null,
+					"method": "GET",
+					"pathVariableData": [],
+					"queryParams": [
+						{
+							"key": "date",
+							"value": "2021-12-10",
+							"equals": true,
+							"description": null,
+							"enabled": true
+						}
+					],
+					"auth": null,
+					"events": null,
+					"folder": null,
+					"responses_order": [],
+					"currentHelper": null,
+					"helperAttributes": null,
+					"collectionId": "25a07e54-4350-432f-b764-0a7f1e029592",
 					"pathVariables": {}
 				}
 			]
@@ -296,7 +327,7 @@
 			]
 		},
 		{
-			"id": "e90f833b-eb40-4802-9388-add63e94196c",
+			"id": "1aa4c0dc-f727-4b3d-800a-17d56f96496e",
 			"name": "My Workspace - globals",
 			"values": [
 				{
