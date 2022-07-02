@@ -46,7 +46,7 @@ func migrate() bool {
 		context.Background(),
 		mongo.IndexModel{
 			Keys: bson.D{{ Key: "id", Value: 1 }},
-			Options: options.Index().SetUnique(true),
+			Options: options.Index().SetUnique(true), // Fest IDs are unique
 		},
 	);
 	if err != nil { return false; }
@@ -54,50 +54,50 @@ func migrate() bool {
 }
 
 // Bulk insert movie records into mongodb.
-func bulkInsertMovies(client *mongo.Client, movies []Movie) {
-	collection := client.Database("festility").Collection("movies"); // Collection to use
+// func bulkInsertMovies(client *mongo.Client, movies []Movie) {
+// 	collection := client.Database("festility").Collection("movies"); // Collection to use
 
-	data := make([]interface{}, len(movies));
-	for i, m := range movies {
-		data[i] = m;
-	}
+// 	data := make([]interface{}, len(movies));
+// 	for i, m := range movies {
+// 		data[i] = m;
+// 	}
 
-	_, err := collection.InsertMany(context.TODO(), data, options.InsertMany().SetOrdered(false));
-	if err != nil {
-		panic(err);
-	}
-}
+// 	_, err := collection.InsertMany(context.TODO(), data, options.InsertMany().SetOrdered(false));
+// 	if err != nil {
+// 		panic(err);
+// 	}
+// }
 
 // Fetches all movie documents in mongodb
-func allMovies(client *mongo.Client) []Movie {
-	// Create context
-	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second);
-	defer cancel();
+// func allMovies(client *mongo.Client) []Movie {
+// 	// Create context
+// 	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second);
+// 	defer cancel();
 
-	collection := client.Database("festility").Collection("movies"); // Collection to use
+// 	collection := client.Database("festility").Collection("movies"); // Collection to use
 
-	cur, err := collection.Find(ctx, bson.D{})
-	if err != nil { panic(err) }
-	defer cur.Close(ctx);
+// 	cur, err := collection.Find(ctx, bson.D{})
+// 	if err != nil { panic(err) }
+// 	defer cur.Close(ctx);
 
-	var res []Movie;
+// 	var res []Movie;
 
-	// TODO: Add pagination
+// 	// TODO: Add pagination
 
-	for cur.Next(ctx) { // Iterate cursor
-		var result Movie;
+// 	for cur.Next(ctx) { // Iterate cursor
+// 		var result Movie;
 
-		err := cur.Decode(&result);
-		if err != nil { panic(err) }
+// 		err := cur.Decode(&result);
+// 		if err != nil { panic(err) }
 
-		res = append(res, result);
-		// do something with result....
-	}
-	if err := cur.Err(); err != nil {
-		panic(err);
-	}
-	return res; // Return document slice
-}
+// 		res = append(res, result);
+// 		// do something with result....
+// 	}
+// 	if err := cur.Err(); err != nil {
+// 		panic(err);
+// 	}
+// 	return res; // Return document slice
+// }
 
 // Creates new festival record & returns inserted ID.
 func createFest(client *mongo.Client, data Fest) string {
@@ -120,10 +120,10 @@ func createFest(client *mongo.Client, data Fest) string {
 }
 
 // Fetches one festival record by fest id.
-func getFest(client *mongo.Client, id string) Fest {
+func getFest(client *mongo.Client, fid string) Fest {
 	collection := client.Database("festility").Collection("festival"); // Collection to use
 
-	query := bson.M{ "id": id };
+	query := bson.M{ "id": fid };
 
 	var data Fest;
 	err := collection.FindOne(context.TODO(),query).Decode(&data);
@@ -153,12 +153,12 @@ func bulkCreateSlot(client *mongo.Client, slots []Slot) bool {
 }
 
 // Fetches all slots for a given schedule id.
-func getSlotsOfSchedule(client *mongo.Client, sid string) []Slot {
+func getSlotsOfSchedule(client *mongo.Client, schId string) []Slot {
 	ctx, cancel := context.WithTimeout(context.TODO(), 30 * time.Second);
 	defer cancel();
 
 	collection := client.Database("festility").Collection("slot"); // Collection to use
-	query := bson.M{ "schedule_id": sid };
+	query := bson.M{ "schedule_id": schId };
 
 	cur, err := collection.Find(ctx, query);
 	if err != nil { panic(err); }
@@ -178,6 +178,44 @@ func getSlotsOfSchedule(client *mongo.Client, sid string) []Slot {
 	return docs;
 }
 
+// Fetches all slots between given from and to time.
+func findSlotsByTime(client *mongo.Client, schId string, from int, to int) []Slot {
+	ctx, cancel := context.WithTimeout(context.TODO(), 30 * time.Second);
+	defer cancel();
+
+	collection := client.Database("festility").Collection("slot"); // Collection to use
+	query := bson.M{
+		"schedule_id": schId,
+		"start_time": bson.M{ "$gte": from, "$lt": to }, // Start time between dates
+	};
+	// Omission options
+	opts := options.Find().SetProjection(bson.M{
+		"directors": 0,
+		"original_title": 0,
+		"genres": 0,
+		"languages": 0,
+		"countries": 0,
+	});
+
+	cur, err := collection.Find(ctx, query, opts);
+	if err != nil { panic(err); }
+	defer cur.Close(ctx);
+
+	var docs []Slot; // Array
+
+	for cur.Next(ctx) { // Iterate cursor
+		var d Slot;
+
+		err := cur.Decode(&d); // Decode
+		if err != nil { panic(err); }
+		docs = append(docs, d); // Push into array
+	}
+	if err := cur.Err(); err != nil { panic(err); }
+
+	return docs;
+
+}
+
 // Creates new schedule from slots list.
 func createSchedule(client *mongo.Client, data Schedule) bool {
 	collection := client.Database("festility").Collection("schedule"); // Collection to use
@@ -189,10 +227,24 @@ func createSchedule(client *mongo.Client, data Schedule) bool {
 	return true;
 }
 
-// Fetches the schedule record by fest id & schedule id.
-func getSchedule(client *mongo.Client, fid string, sid string) Schedule {
+// Fetches the default schedule id for a fest.
+func getDefaultScheduleId(client *mongo.Client, fid string) string {
 	collection := client.Database("festility").Collection("schedule"); // Collection to use
-	query := bson.M{ "id": sid, "fest_id": fid };
+	query := bson.M{ "fest_id": fid, "custom": false }; // Default schedule will have Custom=false
+
+	var doc Schedule;
+	err := collection.FindOne(context.TODO(), query).Decode(&doc);
+	if err != nil {
+		panic(err);
+		return "";
+	}
+	return doc.Id;
+}
+
+// Fetches the schedule record by fest id & schedule id.
+func getSchedule(client *mongo.Client, fid string, schId string) Schedule {
+	collection := client.Database("festility").Collection("schedule"); // Collection to use
+	query := bson.M{ "id": schId, "fest_id": fid };
 
 	var doc Schedule;
 	err := collection.FindOne(context.TODO(), query).Decode(&doc);
