@@ -171,6 +171,7 @@ func getScheduleHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, resp);
 }
 
+// Handles request to fetch default schedule for a particular date.
 func getDailyScheduleHandler(c *gin.Context) {
 	festId := c.Param("id");
 	date := c.DefaultQuery("date", time.Now().Format(DateInputParse)); // Format: YYYY-MM-DD
