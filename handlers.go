@@ -58,14 +58,14 @@ func moviesFromListHandler(c *gin.Context) {
 }
 
 // Handles request to read all movie documents in mongodb.
-func readMovies(c *gin.Context) {
-	client := connect();
-	resp := allMovies(client);
-	defer disconnect(client);
+// func readMovies(c *gin.Context) {
+// 	client := connect();
+// 	resp := allMovies(client);
+// 	defer disconnect(client);
 
-	c.JSON(http.StatusOK, resp);
-	// c.Writer.WriteHeader(204);
-}
+// 	c.JSON(http.StatusOK, resp);
+// 	// c.Writer.WriteHeader(204);
+// }
 
 // Handles request to create one festival.
 func createFestHandler(c *gin.Context) {
@@ -93,10 +93,10 @@ func createFestHandler(c *gin.Context) {
 
 // Handles request to get details of one festival.
 func getFestHandler(c *gin.Context) {
-	id := c.Param("id");
+	festId := c.Param("id");
 
 	client := connect();
-	resp := getFest(client, id);
+	resp := getFest(client, festId);
 	defer disconnect(client);
 
 	c.JSON(http.StatusOK, resp);
@@ -145,7 +145,7 @@ func createScheduleHandler(c *gin.Context) {
 	});
 }
 
-// Handles request to fetch one schedule by sid.
+// Handles request to fetch one schedule by schedule id.
 func getScheduleHandler(c *gin.Context) {
 	festId := c.Param("id");
 	scheduleId := c.Param("sid");
@@ -168,5 +168,23 @@ func getScheduleHandler(c *gin.Context) {
 	resp.Username = doc.Username;
 	resp.Slots = slots;
 
+	c.JSON(http.StatusOK, resp);
+}
+
+func getDailyScheduleHandler(c *gin.Context) {
+	festId := c.Param("id");
+	date := c.DefaultQuery("date", time.Now().Format(DateInputParse)); // Format: YYYY-MM-DD
+
+	startOfDay, _ := time.Parse(time.RFC3339, date + "T00:00:00+05:30"); // 00:00:00 IST in ISO
+	endOfDay, _ := time.Parse(time.RFC3339, date + "T23:59:59+05:30"); // 23:59:59 IST in ISO
+
+	client := connect();
+	schId := getDefaultScheduleId(client, festId);
+	if (schId == "") {
+		c.String(http.StatusNotFound, "No schedule present for this fest yet.");
+		return;
+	}
+
+	resp := findSlotsByTime(client, schId, int(startOfDay.Unix()), int(endOfDay.Unix()));
 	c.JSON(http.StatusOK, resp);
 }

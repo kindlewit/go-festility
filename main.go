@@ -9,12 +9,13 @@ func main() {
 	router.GET("/", indexHandler);
 	router.GET("/movie/:id", getMovieHandler);
 	router.GET("/list/:id", moviesFromListHandler);
-	router.GET("/movies", readMovies);
+	// router.GET("/movies", readMovies);
 
 	router.POST("/fest", createFestHandler);
 	router.GET("/fest/:id", getFestHandler);
 
 	router.POST("/fest/:id/schedule", createScheduleHandler);
+	router.GET("/fest/:id/schedule", getDailyScheduleHandler);
 	router.GET("/fest/:id/schedule/:sid", getScheduleHandler);
 
 	migrate(); // Migrate to setup db schema
