@@ -17,7 +17,7 @@ func reformat(doc *TMDBmovie, directors []string) Movie {
 		Date: doc.Date,
 		Synopsis: doc.Synopsis,
 		Tagline: doc.Tagline,
-		Runtime: doc.Runtime,
+		Duration: doc.Runtime,
 		Imdb: doc.Imdb,
 		Poster: POSTER_BASE_URL + doc.Poster,
 	};

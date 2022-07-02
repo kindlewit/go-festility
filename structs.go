@@ -52,7 +52,7 @@ type Movie struct {
 	Genres					[]string		`json:"genres"`
 	Languages				[]Language	`json:"languages"`
 	Countries				[]Country		`json:"countries"`
-	Runtime					int					`json:"runtime"`
+	Duration				int					`json:"duration"`
 	Imdb						string			`json:"imdb_id"`
 	Poster					string			`json:"poster"`
 }
@@ -77,15 +77,14 @@ type Slot struct {
 	ScheduleID			string			`bson:"schedule_id" json:"schedule_id"`
 	Title						string			`bson:"title" json:"title"`
 	Synopsis				string			`bson:"synopsis" json:"synopsis"`
-	From						int					`bson:"from_date" json:"from_date"`
-	To							int					`bson:"to_date" json:"to_date"`
+	Start						int					`bson:"start_time" json:"start_time"`
+	Duration				int					`bson:"duration" json:"duration"`
 	// Movie specific
-	Directors				[]string		`bson:"directors" json:"directors"`
-	OriginalTitle		string			`bson:"original_title" json:"original_title"`
-	Genres					[]string		`bson:"genres" json:"genres"`
-	Languages				[]Language	`bson:"languages" json:"languages"`
-	Countries				[]Country		`bson:"countries" json:"countries"`
-	Runtime					int					`bson:"runtime" json:"runtime"`
+	Directors				[]string		`bson:"directors" json:"directors,omitempty"`
+	OriginalTitle		string			`bson:"original_title" json:"original_title,omitempty"`
+	Genres					[]string		`bson:"genres" json:"genres,omitempty"`
+	Languages				[]Language	`bson:"languages" json:"languages,omitempty"`
+	Countries				[]Country		`bson:"countries" json:"countries,omitempty"`
 	MovieId					int					`bson:"movie_id" json:"movie_id"`
 }
 
