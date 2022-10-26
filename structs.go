@@ -44,8 +44,8 @@ type TMDBmovie struct {
 type Movie struct {
   Id              int         `json:"id"`
   Title           string      `json:"title"`
-  Directors				[]string    `json:"directors"`
-  OriginalTitle		string      `json:"original_title"`
+  Directors       []string    `json:"directors"`
+  OriginalTitle   string      `json:"original_title"`
   Date            string      `json:"date"`
   Tagline         string      `json:"tagline"`
   Synopsis        string      `json:"synopsis"`
@@ -81,7 +81,7 @@ type Slot struct {
   Duration        int         `bson:"duration" json:"duration"`
   // Movie specific
   Directors       []string    `bson:"directors" json:"directors,omitempty"`
-  OriginalTitle		string      `bson:"original_title" json:"original_title,omitempty"`
+  OriginalTitle   string      `bson:"original_title" json:"original_title,omitempty"`
   Genres          []string    `bson:"genres" json:"genres,omitempty"`
   Languages       []Language  `bson:"languages" json:"languages,omitempty"`
   Countries       []Country   `bson:"countries" json:"countries,omitempty"`
