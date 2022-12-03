@@ -13,6 +13,7 @@ type Slot struct {
   Id              string      `bson:"id" json:"id"`
   Type            string      `bson:"slot_type" binding:"required" json:"slot_type" binding:"required"`
   ScheduleID      string      `bson:"schedule_id" json:"schedule_id"`
+  ScreenID        string      `bson:"screen_id" binding:"required" json:"screen_id" binding:"required"`
   Title           string      `bson:"title" json:"title"`
   Synopsis        string      `bson:"synopsis" json:"synopsis"`
   Start           int         `bson:"start_time" json:"start_time"`
