@@ -6,10 +6,10 @@ import (
   "context"
 
   "go.mongodb.org/mongo-driver/mongo"
-  "festility/models"
-  "festility/constants"
   "go.mongodb.org/mongo-driver/mongo/options"
   "go.mongodb.org/mongo-driver/bson"
+	"festility/models"
+  "festility/constants"
 )
 
 // Creates new slot records & returns success.
