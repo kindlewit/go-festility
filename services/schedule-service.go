@@ -10,7 +10,7 @@ import (
   "festility/constants"
 )
 
-// Creates new schedule from slots list.
+// Creates new schedule.
 func CreateSchedule(client *mongo.Client, data models.Schedule) bool {
   collection := client.Database("festility").Collection("schedule"); // Collection to use
   _, err := collection.InsertOne(context.TODO(), data);
@@ -22,18 +22,21 @@ func CreateSchedule(client *mongo.Client, data models.Schedule) bool {
 }
 
 // Fetches the schedule record by fest id & schedule id.
-func GetSchedule(client *mongo.Client, festId string, scheduleId string) (models.Schedule, error) {
+func GetSchedule(client *mongo.Client, festId string, scheduleId string) (data models.Schedule, err error) {
   collection := client.Database("festility").Collection("schedule"); // Collection to use
   query := bson.M{ "id": scheduleId, "fest_id": festId };
 
-  var doc models.Schedule;
-  err := collection.FindOne(context.TODO(), query).Decode(&doc);
+  err = collection.FindOne(context.TODO(), query).Decode(&data);
   if err != nil {
     fmt.Println(err.Error());
-    return doc, constants.MongoReadError;
+    if (err.Error() == "mongo: no documents in result") {
+      // Throwing "mongo: no documents in result" error
+      return data, constants.NoSuchRecordError;
+    }
+    return data, constants.MongoReadError;
   }
 
-  return doc, nil;
+  return data, nil;
 }
 
 // Fetches the default schedule of a festival

@@ -6,9 +6,9 @@ import (
   "context"
 
   "go.mongodb.org/mongo-driver/mongo"
-  "go.mongodb.org/mongo-driver/mongo/options"
   "go.mongodb.org/mongo-driver/bson"
-	"festility/models"
+  "go.mongodb.org/mongo-driver/mongo/options"
+  "festility/models"
   "festility/constants"
 )
 
@@ -31,9 +31,7 @@ func CreateSlots(client *mongo.Client, slots []models.Slot) bool {
 
 
 // Fetches all slots for a given schedule id.
-func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int64) ([]models.Slot, error) {
-  var records []models.Slot; // Array of db records
-  var err error;
+func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int64) (records []models.Slot, err error) {
   var limit int64 = int64(constants.SlotPageLimit);
   var skip int64 = int64(0);
 
@@ -93,10 +91,7 @@ func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int6
 
 
 // Fetches all slots between given from and to time.
-func GetScheduleSlotsByTime(client *mongo.Client, scheduleId string, from int, to int) ([]models.Slot, error) {
-  var records []models.Slot;
-  var err error;
-
+func GetScheduleSlotsByTime(client *mongo.Client, scheduleId string, from int, to int) (records []models.Slot, err error) {
   ctx, cancel := context.WithTimeout(context.TODO(), 30 * time.Second); // New context for find query
   defer cancel();
 

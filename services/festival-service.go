@@ -34,19 +34,19 @@ func CreateFestival(client *mongo.Client, data models.Fest) (bool, error) {
 }
 
 // Fetches one festival record by fest id.
-func GetFestival(client *mongo.Client, fid string) (models.Fest, error) {
+func GetFestival(client *mongo.Client, fid string) (data models.Fest, err error) {
   collection := client.Database("festility").Collection("festival"); // Collection to use
 
   query := bson.M{ "id": fid };
 
-  var data models.Fest;
-  err := collection.FindOne(context.TODO(),query).Decode(&data);
-  // Throwing "mongo: no documents in result" error
+  err = collection.FindOne(context.TODO(),query).Decode(&data);
   if err != nil {
-    if err.Error() == "mongo: no documents in result" { // errors.Is comparison does not work
-      return data, constants.NoSuchRecordError
+    fmt.Println(err.Error());
+    if (err.Error() == "mongo: no documents in result") {
+      // Throwing "mongo: no documents in result" error
+      return data, constants.NoSuchRecordError;
     }
-    panic(err);
+    return data, constants.MongoReadError;
   }
 
   return data, nil;
