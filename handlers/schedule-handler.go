@@ -43,7 +43,8 @@ func CreateScheduleHandler(c *gin.Context) {
     Fest: festId,
     Custom: false, // by default
   }
-  success = services.CreateSchedule(client, newSchedule);
+  success, err = services.CreateSchedule(client, newSchedule);
+  // TODO: handle this err
   if (!success) {
     defer services.Disconnect(client);
     c.JSON(http.StatusInternalServerError, "Unable to create schedule. Please try again.");
