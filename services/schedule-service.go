@@ -11,14 +11,29 @@ import (
 )
 
 // Creates new schedule.
-func CreateSchedule(client *mongo.Client, data models.Schedule) bool {
+func CreateSchedule(client *mongo.Client, data models.Schedule) (bool, error) {
   collection := client.Database("festility").Collection("schedule"); // Collection to use
-  _, err := collection.InsertOne(context.TODO(), data);
+
+  // Create context
+  ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout);
+  defer cancel();
+
+  // Ensure no other record has the same ID (duplicate)
+  count, err := collection.CountDocuments(ctx, bson.M{ "id": data.Id });
   if err != nil {
     fmt.Println(err.Error());
-    return false;
+    return false, constants.DetermineError(err);
   }
-  return true;
+  if count > 0 {
+    return false, constants.ErrDuplicateRecord; // Record already present
+  }
+
+  _, err = collection.InsertOne(ctx, data);
+  if err != nil {
+    fmt.Println(err.Error());
+    return false, constants.DetermineError(err);
+  }
+  return true, nil;
 }
 
 // Fetches the schedule record by fest id & schedule id.
@@ -26,14 +41,14 @@ func GetSchedule(client *mongo.Client, festId string, scheduleId string) (data m
   collection := client.Database("festility").Collection("schedule"); // Collection to use
   query := bson.M{ "id": scheduleId, "fest_id": festId };
 
-  err = collection.FindOne(context.TODO(), query).Decode(&data);
+  // Create context
+  ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout);
+  defer cancel();
+
+  err = collection.FindOne(ctx, query).Decode(&data);
   if err != nil {
     fmt.Println(err.Error());
-    if (err.Error() == "mongo: no documents in result") {
-      // Throwing "mongo: no documents in result" error
-      return data, constants.NoSuchRecordError;
-    }
-    return data, constants.MongoReadError;
+    return data, constants.DetermineError(err);
   }
 
   return data, nil;
@@ -45,14 +60,14 @@ func GetDefaultScheduleID(client *mongo.Client, festId string) (string, error) {
 
   collection := client.Database("festility").Collection("schedule"); // Collection to use
   query := bson.M{ "fest_id": festId, "custom": false }; // Default schedule will have Custom=false
+  // Create context
+  ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout);
+  defer cancel();
 
-  err := collection.FindOne(context.TODO(), query).Decode(&record);
+  err := collection.FindOne(ctx, query).Decode(&record);
   if err != nil {
     fmt.Println(err.Error());
-    if (err.Error() == "mongo: no documents in result") {
-      return "", constants.NonExistantDefaultSchedule;
-    }
-    return "", constants.MongoReadError;
+    return "", constants.DetermineError(err);
   }
   return record.Id, nil;
 }
@@ -61,7 +76,12 @@ func GetDefaultScheduleID(client *mongo.Client, festId string) (string, error) {
 func IsUniqueScheduleID(client *mongo.Client, id string) bool {
   collection := client.Database("festility").Collection("schedule"); // Collection to use
   query := bson.M{ "id": id }; // Docs with the same id
-  count, err := collection.CountDocuments(context.TODO(), query); // Count query
+
+  // Create context
+  ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout);
+  defer cancel();
+
+  count, err := collection.CountDocuments(ctx, query); // Count query
   if err != nil {
     fmt.Println(err.Error());
     return false;

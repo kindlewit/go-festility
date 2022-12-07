@@ -15,13 +15,17 @@ import (
 // Creates new slot records & returns success.
 func CreateSlots(client *mongo.Client, slots []models.Slot) bool {
   collection := client.Database("festility").Collection("slot"); // Collection to use
+  // Create context
+  ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout);
+  defer cancel();
+
   // data should already be sanitized
   data := make([]interface{}, len(slots))
   for i, s := range slots {
     data[i] = s;
   }
 
-  _, err := collection.InsertMany(context.TODO(), data);
+  _, err := collection.InsertMany(ctx, data);
   if err != nil {
     fmt.Println(err.Error());
     return false;
@@ -46,14 +50,14 @@ func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int6
   query := bson.M{ "schedule_id": scheduleId };
   opts := options.Find().SetLimit(limit).SetSkip(skip);
 
-
-  ctx, cancel := context.WithTimeout(context.TODO(), 30 * time.Second); // New context for find query
+  // New context for find query
+  ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout);
   defer cancel();
 
   cursor, err := collection.Find(ctx, query, opts);
   if err != nil {
     fmt.Println(err.Error());
-    return records, constants.MongoReadError;
+    return records, constants.DetermineError(err);
   }
   defer cursor.Close(ctx);
 
@@ -64,13 +68,13 @@ func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int6
     err = cursor.Decode(&d); // Decode cursor data into model
     if err != nil {
       fmt.Println(err.Error());
-      return records, constants.DataParsingError;
+      return records, constants.ErrDataParse;
     }
 
     // Add data if movie.
     if (d.Type == constants.SlotTypeMovie && d.MovieId != 0) {
       var movieData models.TMDBmovie;
-      movieData, err = GetMovie(d.MovieId);
+      movieData, err = GetMovie(fmt.Sprintf("%d", d.MovieId));
       if (err != nil) {
         return records, err;
       }
@@ -83,7 +87,7 @@ func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int6
   }
   if err = cursor.Err(); err != nil {
     fmt.Println(err.Error());
-    return records, constants.MongoReadError;
+    return records, constants.DetermineError(err);
    }
 
   return records, nil;
@@ -92,9 +96,6 @@ func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int6
 
 // Fetches all slots between given from and to time.
 func GetScheduleSlotsByTime(client *mongo.Client, scheduleId string, from int, to int) (records []models.Slot, err error) {
-  ctx, cancel := context.WithTimeout(context.TODO(), 30 * time.Second); // New context for find query
-  defer cancel();
-
   collection := client.Database("festility").Collection("slot"); // Collection to use
   query := bson.M{
     "schedule_id": scheduleId,
@@ -108,11 +109,13 @@ func GetScheduleSlotsByTime(client *mongo.Client, scheduleId string, from int, t
     "languages": 0,
     "countries": 0,
   });
+  ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second); // New context for find query
+  defer cancel();
 
   cur, err := collection.Find(ctx, query, opts);
   if err != nil {
     fmt.Println(err.Error());
-    return records, constants.MongoReadError;
+    return records, constants.DetermineError(err);
   }
   defer cur.Close(ctx);
 
@@ -122,13 +125,13 @@ func GetScheduleSlotsByTime(client *mongo.Client, scheduleId string, from int, t
     err := cur.Decode(&d); // Decode cursor data into model
     if err != nil {
       fmt.Println(err.Error());
-      return records, constants.DataParsingError;
+      return records, constants.ErrDataParse;
     }
     records = append(records, d); // Push data into array
   }
   if err := cur.Err(); err != nil {
     fmt.Println(err.Error());
-    return records, constants.MongoReadError;
+    return records, constants.DetermineError(err);
   }
 
   return records, nil;
