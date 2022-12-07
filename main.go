@@ -1,23 +1,29 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+  "github.com/gin-gonic/gin"
+  "festility/handlers"
+  // "festility/services"
+)
 
 func main() {
   router := gin.Default() // Equivalent to app in express
 
   // Bind routes & handlers
-  router.GET("/", indexHandler);
-  router.GET("/movie/:id", getMovieHandler);
-  router.GET("/list/:id", moviesFromListHandler);
-  // router.GET("/movies", readMovies);
+  router.GET("/", handlers.IndexHandler);
 
-  router.POST("/fest", createFestHandler);
-  router.GET("/fest/:id", getFestHandler);
+  router.GET("/movie/:id", handlers.GetMovieHandler);
 
-  router.POST("/fest/:id/schedule", createScheduleHandler);
-  router.GET("/fest/:id/schedule", getDailyScheduleHandler);
-  router.GET("/fest/:id/schedule/:sid", getScheduleHandler);
+  router.POST("/fest", handlers.CreateFestivalHandler);
+  router.GET("/fest/:id", handlers.GetFestHandler);
 
-  migrate(); // Migrate to setup db schema
+  router.POST("/fest/:id/schedule", handlers.CreateScheduleHandler);
+  router.GET("/fest/:id/schedule", handlers.GetDailyScheduleHandler);
+  router.GET("/fest/:id/schedule/:sid", handlers.GetScheduleHandler);
+
+  router.POST("/cinema", handlers.CreateCinemaHandler);
+  router.GET("/cinema/:id", handlers.GetCinemaHandler);
+
+  // services.Migrate(); // Migrate to setup db schema
   router.Run(); // Start the server
 }
