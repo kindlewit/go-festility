@@ -40,7 +40,7 @@ func CreateScheduleHandler(c *gin.Context) {
   // Store schedule
   newSchedule := models.Schedule{
     Id: newScheduleId,
-    Fest:	festId,
+    Fest: festId,
     Custom: false, // by default
   }
   success = services.CreateSchedule(client, newSchedule);
