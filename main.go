@@ -12,6 +12,8 @@ func main() {
   // Bind routes & handlers
   router.GET("/", handlers.IndexHandler);
 
+  router.GET("/movie/:id", handlers.GetMovieHandler);
+
   router.POST("/fest", handlers.CreateFestivalHandler);
   router.GET("/fest/:id", handlers.GetFestHandler);
 
