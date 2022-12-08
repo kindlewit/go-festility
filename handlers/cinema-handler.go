@@ -86,7 +86,7 @@ func AddCinemaScreensHandler(c *gin.Context) {
   }
 
   // Ensure all records have cinema same ID.
-  for i := 0; i <= len(body); i++ {
+  for i := 0; i < len(body); i++ {
     body[i].CinemaID = cinemaID;
   }
   client := services.Connect();
@@ -102,6 +102,33 @@ func AddCinemaScreensHandler(c *gin.Context) {
     return;
   }
 
-  c.JSON(http.StatusOK, gin.H{ "cinema_id": cinemaID, "number_of_slots": len(body) });
+  c.JSON(http.StatusOK, gin.H{
+    "cinema_id": cinemaID,
+    "number_of_screens": len(body),
+  });
+  return;
+}
+
+// Handles request to fetch cinema screens.
+func GetCinemaScreensHandler(c *gin.Context) {
+  var response []models.Screen;
+  var err error;
+
+  cinemaID := c.Param("id");
+  if (cinemaID == "" || cinemaID == "null") {
+    // Missing cinema ID param
+    c.JSON(http.StatusBadRequest, "Missing valid cinema id. Please check the parameter.");
+    return;
+  }
+  client := services.Connect();
+  response, err = services.GetCinemaScreens(client, cinemaID);
+  defer services.Disconnect(client);
+
+  if err != nil {
+    constants.HandleError(c, err);
+    return;
+  }
+
+  c.JSON(http.StatusOK, response);
   return;
 }
