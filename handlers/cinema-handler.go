@@ -66,3 +66,42 @@ func GetCinemaHandler(c *gin.Context) {
   c.JSON(http.StatusOK, record);
   return;
 }
+
+// Handles request to insert screens to a cinema.
+func AddCinemaScreensHandler(c *gin.Context) {
+  var body []models.Screen;
+  var success bool;
+  var err error;
+
+  cinemaID := c.Param("id");
+  if (cinemaID == "" || cinemaID == "null") {
+    // Missing cinema ID param
+    c.JSON(http.StatusBadRequest, "Missing valid cinema id. Please check the parameter.");
+    return;
+  }
+
+  if err = c.BindJSON(&body); err != nil {
+    c.String(http.StatusBadRequest, "Request body is of invalid structure.");
+    return;
+  }
+
+  // Ensure all records have cinema same ID.
+  for i := 0; i <= len(body); i++ {
+    body[i].CinemaID = cinemaID;
+  }
+  client := services.Connect();
+  success, err = services.CreateCinemaScreens(client, body);
+  defer services.Disconnect(client);
+
+  if err != nil {
+    constants.HandleError(c, err);
+    return;
+  }
+  if !success {
+    c.JSON(http.StatusInternalServerError, "Faced an error in record creation. Please try again.");
+    return;
+  }
+
+  c.JSON(http.StatusOK, gin.H{ "cinema_id": cinemaID, "number_of_slots": len(body) });
+  return;
+}
