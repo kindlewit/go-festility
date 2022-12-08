@@ -11,5 +11,5 @@ type Cinema struct {
 type Screen struct {
   Id          string    `bson:"id" json:"id"`
   Name        string    `bson:"name" binding:"required" json:"name" binding:"required"`
-  CinemaID    string    `bson:"cinema_id" binding:"required" json:"cinema_id" binding:"required"`
+  CinemaID    string    `bson:"cinema_id" binding:"required" json:"cinema_id"`
 }
