@@ -88,6 +88,8 @@ func AddCinemaScreensHandler(c *gin.Context) {
   // Ensure all records have cinema same ID.
   for i := 0; i < len(body); i++ {
     body[i].CinemaID = cinemaID;
+    // Add screen ID
+    body[i].Id = fmt.Sprintf("%d", rand.Intn(1000)); // Random id b/w 0 - 1000
   }
   client := services.Connect();
   success, err = services.CreateCinemaScreens(client, body);
