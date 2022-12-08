@@ -76,7 +76,7 @@ func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int6
       var movieData models.TMDBmovie;
       movieData, err = GetMovie(fmt.Sprintf("%d", d.MovieId));
       if (err != nil) {
-        return records, err;
+        return records, err; // Error already determined in movie service
       }
       d.Title = movieData.Title;
       d.Synopsis = movieData.Synopsis;
