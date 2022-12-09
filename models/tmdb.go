@@ -10,10 +10,6 @@ type TMDBcountry struct {
   Name  string  `json:"name"`
 }
 
-type Genre struct {
-  Id    int     `json:"id"`
-  Name  string  `json:"name"`
-}
 
 type TMDBmovie struct {
   Id              int             `json:"id"`
