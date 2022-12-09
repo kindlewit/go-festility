@@ -29,12 +29,12 @@ func CreateFestival(client *mongo.Client, data models.Fest) (bool, error) {
     return false, constants.ErrDuplicateRecord; // Record already present
   }
 
-  _, err = collection.InsertOne(ctx, data);
+  result, err := collection.InsertOne(ctx, data);
   if err != nil {
     fmt.Println(err.Error());
     return false, constants.DetermineError(err);
   }
-  return true, nil;
+return result.InsertedID != nil, nil;
 }
 
 // Fetches one festival record by fest id.

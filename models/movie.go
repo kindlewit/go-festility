@@ -26,6 +26,11 @@ type Movie struct {
   Poster          string      `json:"poster"`
 }
 
+type Crew struct {
+  Name  string  `json:"name"`
+  Job   string  `json:"job"`
+}
+
 type MovieSlot struct {
   Directors       []string    `bson:"directors" json:"directors,omitempty"`
   OriginalTitle   string      `bson:"original_title" json:"original_title,omitempty"`

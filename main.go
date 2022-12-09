@@ -23,6 +23,8 @@ func main() {
 
   router.POST("/cinema", handlers.CreateCinemaHandler);
   router.GET("/cinema/:id", handlers.GetCinemaHandler);
+  router.POST("/cinema/:id/screen", handlers.AddCinemaScreensHandler);
+  router.GET("/cinema/:id/screen", handlers.GetCinemaScreensHandler);
 
   // services.Migrate(); // Migrate to setup db schema
   router.Run(); // Start the server

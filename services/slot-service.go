@@ -8,6 +8,7 @@ import (
   "go.mongodb.org/mongo-driver/mongo"
   "go.mongodb.org/mongo-driver/bson"
   "go.mongodb.org/mongo-driver/mongo/options"
+  "festility/utils"
   "festility/models"
   "festility/constants"
 )
@@ -76,7 +77,7 @@ func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int6
       var movieData models.TMDBmovie;
       movieData, err = GetMovie(fmt.Sprintf("%d", d.MovieId));
       if (err != nil) {
-        return records, err;
+        return records, err; // Error already determined in movie service
       }
       d.Title = movieData.Title;
       d.Synopsis = movieData.Synopsis;
@@ -101,6 +102,7 @@ func GetScheduleSlotsByTime(client *mongo.Client, scheduleId string, from int, t
     "schedule_id": scheduleId,
     "start_time": bson.M{ "$gte": from, "$lt": to }, // Start time between dates
   };
+
   // Omission options (keys to include/omit)
   opts := options.Find().SetProjection(bson.M{
     "directors": 0,
@@ -109,7 +111,9 @@ func GetScheduleSlotsByTime(client *mongo.Client, scheduleId string, from int, t
     "languages": 0,
     "countries": 0,
   });
-  ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second); // New context for find query
+
+  // New context for find query
+  ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second);
   defer cancel();
 
   cur, err := collection.Find(ctx, query, opts);
@@ -119,6 +123,9 @@ func GetScheduleSlotsByTime(client *mongo.Client, scheduleId string, from int, t
   }
   defer cur.Close(ctx);
 
+  // A hashmap to eliminate fetching same movie details multiple times
+  movieHashMap := make(map[int]models.TMDBmovie);
+
   for cur.Next(ctx) { // Iterate cursor
     var d models.Slot;
 
@@ -127,11 +134,41 @@ func GetScheduleSlotsByTime(client *mongo.Client, scheduleId string, from int, t
       fmt.Println(err.Error());
       return records, constants.ErrDataParse;
     }
+
+    // Add data if movie.
+    if (d.Type == constants.SlotTypeMovie && d.MovieId != 0) {
+
+      if movieData, isPresent := movieHashMap[d.MovieId]; isPresent {
+
+        // The movie details is already present in the hashmap,
+        // so we use the same data, instead of calling the external API
+        d = utils.BindMovieToSlot(d, movieData);
+
+      } else {
+
+        // The data is not present in the hashmap, so we call the external API
+        movieData, err := GetMovie(fmt.Sprintf("%d", d.MovieId)); // Service calls external API
+        if (err != nil) {
+          return records, err; // Error already determined in movie service
+        }
+
+        d = utils.BindMovieToSlot(d, movieData);
+        movieHashMap[d.MovieId] = movieData;
+
+      }
+
+    }
+
     records = append(records, d); // Push data into array
   }
   if err := cur.Err(); err != nil {
     fmt.Println(err.Error());
     return records, constants.DetermineError(err);
+  }
+
+  fmt.Println(len(movieHashMap));
+  for k := range movieHashMap {
+    delete(movieHashMap, k); // Force clear the hashmap
   }
 
   return records, nil;
