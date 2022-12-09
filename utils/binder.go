@@ -1,6 +1,10 @@
 package utils
 
-import "festility/models"
+import (
+  "regexp"
+
+  "festility/models"
+)
 
 // Helps bind movie data into slot data model.
 func BindMovieToSlot(slot models.Slot, movie models.TMDBmovie) models.Slot {
@@ -10,7 +14,13 @@ func BindMovieToSlot(slot models.Slot, movie models.TMDBmovie) models.Slot {
     slot.OriginalTitle = movie.OriginalTitle;
   }
 
-  slot.Synopsis = movie.Synopsis;
+  // Year from date
+  if hasYear, _ := regexp.MatchString(`\d\d\d\d`, movie.Date); hasYear {
+    yearRegex := regexp.MustCompile(`\d\d\d\d`);
+    slot.Year = yearRegex.FindString(movie.Date);
+  }
+
+  // slot.Synopsis = movie.Synopsis;
   slot.Duration = movie.Runtime;
   slot.Languages = make([]models.Language, len(movie.Languages));
   slot.Countries = make([]models.Country, len(movie.Countries));
