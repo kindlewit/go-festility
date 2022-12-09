@@ -74,14 +74,13 @@ func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int6
 
     // Add data if movie.
     if (d.Type == constants.SlotTypeMovie && d.MovieId != 0) {
-      var movieData models.TMDBmovie;
-      movieData, err = GetMovie(fmt.Sprintf("%d", d.MovieId));
+
+      movieData, err := GetMovie(fmt.Sprintf("%d", d.MovieId));
       if (err != nil) {
         return records, err; // Error already determined in movie service
       }
-      d.Title = movieData.Title;
-      d.Synopsis = movieData.Synopsis;
-      d.Duration = movieData.Runtime;
+      d = utils.BindMovieToSlot(d, movieData);
+
     }
 
     records = append(records, d); // Push data record into array

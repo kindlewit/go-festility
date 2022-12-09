@@ -14,13 +14,14 @@ type Slot struct {
   Type            string      `bson:"slot_type" json:"slot_type" binding:"required"`
   ScheduleID      string      `bson:"schedule_id" json:"schedule_id"`
   ScreenID        string      `bson:"screen_id" json:"screen_id" binding:"required"`
-  Title           string      `bson:"title" json:"title"`
-  Synopsis        string      `bson:"synopsis" json:"synopsis"`
   Start           int         `bson:"start_time" json:"start_time"`
   Duration        int         `bson:"duration" json:"duration"`
   // Movie specific
+  Title           string      `bson:"title" json:"title"`
+  Synopsis        string      `bson:"synopsis" json:"synopsis"`
   Directors       []string    `bson:"directors" json:"directors,omitempty"`
   OriginalTitle   string      `bson:"original_title" json:"original_title,omitempty"`
+  Year            string      `bson:"year" json:"year,omitempty"`
   Genres          []string    `bson:"genres" json:"genres,omitempty"`
   Languages       []Language  `bson:"languages" json:"languages,omitempty"`
   Countries       []Country   `bson:"countries" json:"countries,omitempty"`

@@ -10,12 +10,24 @@ type Country struct {
   Name  string  `json:"name"`
 }
 
+type Genre struct {
+  Id    int     `json:"id"`
+  Name  string  `json:"name"`
+}
+
+type Crew struct {
+  Name  string  `json:"name"`
+  Job   string  `json:"job"`
+}
+
+
 type Movie struct {
   Id              int         `json:"id"`
   Title           string      `json:"title"`
   Directors       []string    `json:"directors"`
   OriginalTitle   string      `json:"original_title"`
   Date            string      `json:"date"`
+  Year            string      `json:"year"`
   Tagline         string      `json:"tagline"`
   Synopsis        string      `json:"synopsis"`
   Genres          []string    `json:"genres"`
@@ -24,19 +36,4 @@ type Movie struct {
   Duration        int         `json:"duration"`
   Imdb            string      `json:"imdb_id"`
   Poster          string      `json:"poster"`
-}
-
-type Crew struct {
-  Name  string  `json:"name"`
-  Job   string  `json:"job"`
-}
-
-type MovieSlot struct {
-  Directors       []string    `bson:"directors" json:"directors,omitempty"`
-  OriginalTitle   string      `bson:"original_title" json:"original_title,omitempty"`
-  Genres          []string    `bson:"genres" json:"genres,omitempty"`
-  Languages       []Language  `bson:"languages" json:"languages,omitempty"`
-  Countries       []Country   `bson:"countries" json:"countries,omitempty"`
-  MovieId         int         `bson:"movie_id" json:"movie_id"`
-  Slot
 }

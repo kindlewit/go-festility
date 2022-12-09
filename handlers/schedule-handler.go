@@ -125,9 +125,6 @@ func GetDailyScheduleHandler(c *gin.Context) {
   festId := c.Param("id");
   date := c.DefaultQuery("date", time.Now().Format(constants.DateInputFormat)); // Format: YYYY-MM-DD
 
-  fmt.Println(festId);
-  fmt.Println(date);
-
   startOfDay, _ := time.Parse(time.RFC3339, date + "T00:00:00+05:30"); // 00:00:00 IST in ISO
   endOfDay, _ := time.Parse(time.RFC3339, date + "T23:59:59+05:30"); // 23:59:59 IST in ISO
   startOfDayAsUnix := int(startOfDay.Unix());
