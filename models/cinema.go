@@ -13,3 +13,12 @@ type Screen struct {
   Name        string    `bson:"name" json:"name" binding:"required"`
   CinemaID    string    `bson:"cinema_id" json:"cinema_id"`
 }
+
+type CinemaScreen struct {
+  Id            string    `json:"id"`
+  ScreenName    string    `json:"screen_name"`
+  CinemaName    string    `json:"cinema_name"`
+  Address       string    `json:"address"`
+  City          string    `json:"city" binding:"required"`
+  PlusCode      string    `json:"google_plus_code,omitempty"`
+}
