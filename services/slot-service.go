@@ -36,7 +36,7 @@ func CreateSlots(client *mongo.Client, slots []models.Slot) bool {
 
 
 // Fetches all slots for a given schedule id.
-func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int64) (records []models.Slot, err error) {
+func GetScheduleSlots(client *mongo.Client, scheduleID string, optionals ...int64) (records []models.Slot, err error) {
   var limit int64 = int64(constants.SlotPageLimit);
   var skip int64 = int64(0);
 
@@ -48,7 +48,7 @@ func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int6
   }
 
   collection := client.Database("festility").Collection("slot"); // Collection to use
-  query := bson.M{ "schedule_id": scheduleId };
+  query := bson.M{ "schedule_id": scheduleID };
   opts := options.Find().SetLimit(limit).SetSkip(skip);
 
   // New context for find query
@@ -93,12 +93,58 @@ func GetScheduleSlots(client *mongo.Client, scheduleId string, optionals ...int6
   return records, nil;
 }
 
+// Fetches screen ID list of slots for a given schedule id.
+func GetSlotScreensOfSchedule(client *mongo.Client, scheduleID string) (data []string, err error) {
+  collection := client.Database("festility").Collection("slot"); // Collection to use
+  query := bson.M{ "schedule_id": scheduleID };
+  opts := options.Find().SetProjection(bson.M{
+    "duration": 0,
+    "start":0,
+    "title": 0,
+    "synopsis": 0,
+    "directors": 0,
+    "original_title": 0,
+    "year": 0,
+    "genres": 0,
+    "languages": 0,
+    "countries": 0,
+  });
+
+  // New context for find query
+  ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout);
+  defer cancel();
+
+  cur, err := collection.Find(ctx, query, opts);
+  if err != nil {
+    fmt.Println(err.Error());
+    return data, constants.DetermineError(err);
+  }
+  defer cur.Close(ctx);
+
+  for cur.Next(ctx) { // Iterate cursor
+    var d models.Slot;
+
+    err := cur.Decode(&d); // Decode cursor data into model
+    if err != nil {
+      fmt.Println(err.Error());
+      return data, constants.ErrDataParse;
+    }
+
+    data = append(data, d.ScreenID);
+  }
+  if err := cur.Err(); err != nil {
+    fmt.Println(err.Error());
+    return data, constants.DetermineError(err);
+  }
+
+  return data, nil;
+}
 
 // Fetches all slots between given from and to time.
-func GetScheduleSlotsByTime(client *mongo.Client, scheduleId string, from int, to int) (records []models.Slot, err error) {
+func GetScheduleSlotsByTime(client *mongo.Client, scheduleID string, from int, to int) (records []models.Slot, err error) {
   collection := client.Database("festility").Collection("slot"); // Collection to use
   query := bson.M{
-    "schedule_id": scheduleId,
+    "schedule_id": scheduleID,
     "start_time": bson.M{ "$gte": from, "$lt": to }, // Start time between dates
   };
 
