@@ -37,3 +37,17 @@ func BindMovieToSlot(slot models.Slot, movie models.TMDBmovie) models.Slot {
   }
   return slot;
 }
+
+// Helps bind cinema & screen data into CinemaScreen model.
+func BindCinemaToScreen(screen models.Screen, cinema models.Cinema) models.CinemaScreen {
+  bound := models.CinemaScreen{
+    CinemaName: cinema.Name,
+    Address: cinema.Address,
+    City: cinema.City,
+    PlusCode: cinema.PlusCode,
+    ScreenName: screen.Name,
+    Id: screen.Id,
+  };
+
+  return bound;
+}

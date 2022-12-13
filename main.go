@@ -17,6 +17,8 @@ func main() {
   router.POST("/fest", handlers.CreateFestivalHandler);
   router.GET("/fest/:id", handlers.GetFestHandler);
 
+  router.GET("/fest/:id/screen", handlers.GetFestScreensHandler);
+
   router.POST("/fest/:id/schedule", handlers.CreateScheduleHandler);
   router.GET("/fest/:id/schedule", handlers.GetDailyScheduleHandler);
   router.GET("/fest/:id/schedule/:sid", handlers.GetScheduleHandler);
