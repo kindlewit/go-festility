@@ -56,6 +56,40 @@ func GetCinema(client *mongo.Client, cinemaID string) (data models.Cinema, err e
   return data, nil;
 }
 
+// Fetches multiple cinema records.
+func GetCinemasInBulk(client *mongo.Client, cinemaIDlist []string) (data []models.Screen, err error) {
+  collection := client.Database("festility").Collection("cinema"); // Collection to use
+  query := bson.M{ "id": bson.M{ "$in": cinemaIDlist } };
+
+  // Create context
+  ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout);
+  defer cancel();
+
+  cursor, err := collection.Find(ctx, query);
+  if err != nil {
+    fmt.Println(err.Error());
+    return data, constants.DetermineError(err);
+  }
+  defer cursor.Close(ctx);
+
+  for cursor.Next(ctx) { // Iterate cursor
+    var d models.Screen;
+
+    err = cursor.Decode(&d); // Decode cursor data into model
+    if err != nil {
+      fmt.Println(err.Error());
+      return data, constants.ErrDataParse;
+    }
+
+    data = append(data, d); // Push data record into array
+  }
+  if err = cursor.Err(); err != nil {
+    fmt.Println(err.Error());
+    return data, constants.DetermineError(err);
+  }
+
+  return data, nil;
+}
 
 // Updates a cinema record by id.
 func ReplaceCinema(client *mongo.Client, cinemaID string, replacement models.Cinema) (success bool, err error) {
