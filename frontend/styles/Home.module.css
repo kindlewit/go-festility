@@ -151,8 +151,8 @@
   justify-content: space-between;
   /* width: 1060px;
   min-height: 416px; */
-  min-width: 256px !important;
-  max-width: fit-content;
+  /* min-width: 256px !important; */
+  min-width: fit-content;
   overflow: none;
   height: 112px;
   padding: 4px 16px 4px 16px;
@@ -192,11 +192,18 @@
 
 @media (max-width: 375px) {
   .flex_item {
-    border-left: solid 0.3em indianred;
+    border-left: solid 0.175em indianred;
     /* background-color: indianred; */
     /* text-align: center; */
-    /* padding: 0.5em 1em; */
+    padding: 0.05em 0.1em;
     min-width: 124px;
+    min-height: 90vh;
+    font-size: 1em;
+  }
+  .thin_flex_item {
+    min-width: 48px;
+    border-left: solid 0.175em indianred;
+    min-height: 90vh;
     font-size: 1em;
   }
 }
