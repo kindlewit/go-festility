@@ -3,8 +3,18 @@ import { Fragment } from "react";
 import styles from "../styles/Home.module.css";
 import SlotCard from "../components/SlotCard";
 import { SlotStruct } from "../entities/SlotType";
+import { GetServerSideProps } from "next";
+const { API_ENDPOINT } = process.env;
 
-export default function Home() {
+type ServerSideProps = {
+  data?: SlotStruct[];
+};
+
+type PathProp = {
+  fid: string;
+};
+
+export default function Home(props: { data: SlotStruct[] }) {
   const hoursDisplay = Array.from({ length: 24 }).map(
     (v: unknown, i: number) => {
       // if (i < 9) {
@@ -23,18 +33,11 @@ export default function Home() {
     }
   );
 
-  const slotData: SlotStruct = {
-    title: "Pierrot the fool",
-    id: 123,
-    slot_type: "movie",
-    schedule_id: "123BAS",
-    screen_id: "SERENE",
-    duration: 127,
-    start_time: new Date(2022, 12, 21, 14, 30, 0, 0).valueOf(),
-    // name: "abc",
-    movie_id: 2786,
-    directors: ["Jean Luc-Godard", "Fellini"],
-  };
+  let slotData = props.data.map((d) => (
+    <section>
+      <SlotCard {...d} />
+    </section>
+  ));
 
   return (
     <Fragment>
@@ -50,8 +53,33 @@ export default function Home() {
             {hoursDisplay}
           </div>
         </div>
-        <SlotCard {...slotData} />
+        {slotData}
       </div>
     </Fragment>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<ServerSideProps, PathProp> =
+  async function (context) {
+    const fid = "Fest2022";
+
+    const res = await fetch(
+      `${API_ENDPOINT}/fest/${fid}/schedule?date=2021-12-10`
+    );
+
+    if (res.status == 200) {
+      const json: [SlotStruct] = await res.json();
+
+      if (json != null) {
+        return {
+          props: {
+            data: json,
+          },
+        };
+      }
+    }
+    return {
+      notFound: true,
+      props: {},
+    };
+  };
