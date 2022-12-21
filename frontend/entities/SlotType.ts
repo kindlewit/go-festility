@@ -13,3 +13,13 @@ export type SlotStruct = {
   movie_id: number;
   directors?: string[];
 };
+
+export type TempSlotStruct = {
+  movie_id: number;
+  duration?: number;
+  title?: string;
+  year?: string;
+  screen_id: number;
+  slot_type: string;
+  start_time: number;
+};

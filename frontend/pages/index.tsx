@@ -63,11 +63,11 @@ export default function Home(props: { data: SlotStruct[] }) {
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps, PathProp> =
   async function (context) {
-    const fid = "Fest2022";
+    // const fid = "Fest2022";
+    // const url = `${API_ENDPOINT}/fest/${fid}/schedule?date=2021-12-10`;
+    const url = "http://localhost:3000/api/fest/1"
 
-    const res = await fetch(
-      `${API_ENDPOINT}/fest/${fid}/schedule?date=2021-12-10`
-    );
+    const res = await fetch(url);
 
     if (res.status == 200) {
       const json: [SlotStruct] = await res.json();
