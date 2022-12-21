@@ -6,7 +6,7 @@ import SlotCard from "../components/SlotCard";
 import { SlotStruct } from "../entities/SlotType";
 import styles from "../styles/Home.module.css";
 
-const { API_ENDPOINT } = process.env;
+// const { API_ENDPOINT } = process.env;
 
 type ServerSideProps = {
   data?: SlotStruct[];
@@ -48,8 +48,7 @@ export default function Home(props: { data: SlotStruct[] }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Festility</h1>
-      <div>
+      <div style={{ position: "relative" }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>
             {hoursDisplay}
@@ -65,12 +64,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps, PathProp> =
   async function (context) {
     // const fid = "Fest2022";
     // const url = `${API_ENDPOINT}/fest/${fid}/schedule?date=2021-12-10`;
-    const url = "http://localhost:3000/api/fest/1"
+    const url = "http://localhost:3000/api/fest/1";
 
     const res = await fetch(url);
 
     if (res.status == 200) {
-      const json: [SlotStruct] = await res.json();
+      const json: SlotStruct[] = await res.json();
 
       if (json != null) {
         return {

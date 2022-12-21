@@ -5,13 +5,14 @@ export type SlotStruct = {
   // to_date: number;
   slot_type: string;
   schedule_id: string;
-  screen_id: string;
+  screen_id: number;
   start_time: number;
   duration: number;
   title: string;
   year?: string;
   movie_id: number;
   directors?: string[];
+  screen_name: string;
 };
 
 export type TempSlotStruct = {
