@@ -154,16 +154,16 @@
   /* min-width: 256px !important; */
   min-width: fit-content;
   overflow: none;
-  height: 112px;
+  height: var(--slot-fixed-height);
   padding: 4px 16px 4px 16px;
   /* min-width: 70rem; */
   /* height: 32rem; */
   /* padding: 0.75em; */
   /* font-size: 4em; */
-  font-size: 16px;
+  /* font-size: 16px; */
   /* position: relative; */
   /* top: -200px; */
-  background: indianred;
+  background: cornflowerblue;
   border: none;
   border-radius: 0.75em;
 }
@@ -196,9 +196,11 @@
     /* background-color: indianred; */
     /* text-align: center; */
     padding: 0.05em 0.1em;
-    min-width: 124px;
-    min-height: 90vh;
+    /* min-width: 124px; */
+    min-width: var(--time-swimline-width);
+    height: 100vh;
     font-size: 1em;
+    font-weight: bold;
   }
   .thin_flex_item {
     min-width: 48px;

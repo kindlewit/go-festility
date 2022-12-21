@@ -10,8 +10,27 @@ import { SlotStruct } from "../entities/SlotType";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export function timeToValue(time: Dayjs): number {
-  return time.hour() + time.minute() / 60;
+function calculateTop(screenID: number) {
+  switch (screenID) {
+    case 10: {
+      return "30px";
+    }
+    case 11: {
+      return "150px";
+    }
+    case 12: {
+      return "270px";
+    }
+    case 13: {
+      return "390px";
+    }
+    case 14: {
+      return "510px";
+    }
+    default: {
+      return "30px";
+    }
+  }
 }
 
 const SlotCard: FC<SlotStruct> = (slot): ReactElement => {
@@ -22,6 +41,7 @@ const SlotCard: FC<SlotStruct> = (slot): ReactElement => {
 
   let slotPosForCss = {
     x: slotStartInIST.hour() + slotStartInIST.minute() / 60,
+    y: calculateTop(slot.screen_id),
   };
 
   let concatDirectors = slot?.directors?.join(" \u2022 ");
@@ -30,10 +50,10 @@ const SlotCard: FC<SlotStruct> = (slot): ReactElement => {
     <div
       className={styles.slot}
       style={{
-        position: "relative",
-        top: "-500px",
-        left: `calc(${slotPosForCss.x} * 124px)`,
-        width: `calc(${slot.duration / 60} * 124px)`,
+        position: "absolute",
+        top: slotPosForCss.y,
+        left: `calc(${slotPosForCss.x} * var(--time-swimline-width))`,
+        width: `calc(${slot.duration / 60} * var(--time-swimline-width))`,
       }}
     >
       <div className={styles.slot_details}>
@@ -45,6 +65,7 @@ const SlotCard: FC<SlotStruct> = (slot): ReactElement => {
           <strong>{slot.title}</strong>
         </span>
         <span className={styles.slot__director}>{concatDirectors}</span>
+        <span className={styles.slot__director}>{slot.screen_name}</span>
         <span className={styles.slot__duration}>{slot.duration}'</span>
       </div>
     </div>
