@@ -1,9 +1,11 @@
 import Head from "next/head";
 import { Fragment } from "react";
-import styles from "../styles/Home.module.css";
+import { GetServerSideProps } from "next";
+
 import SlotCard from "../components/SlotCard";
 import { SlotStruct } from "../entities/SlotType";
-import { GetServerSideProps } from "next";
+import styles from "../styles/Home.module.css";
+
 const { API_ENDPOINT } = process.env;
 
 type ServerSideProps = {

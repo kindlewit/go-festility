@@ -1,10 +1,11 @@
-import { FC, ReactElement, startTransition } from "react";
-import { SlotStruct } from "../entities/SlotType";
-import styles from "../styles/Home.module.css";
-import { DEF_TIMEZONE } from "../constants";
+import { FC, ReactElement } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+
+import { DEF_TIMEZONE, SLOT_TIME_FORMAT } from "../constants";
+import styles from "../styles/Home.module.css";
+import { SlotStruct } from "../entities/SlotType";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -37,7 +38,8 @@ const SlotCard: FC<SlotStruct> = (slot): ReactElement => {
     >
       <div className={styles.slot_details}>
         <span>
-          {slotStartInIST.format("hh:mm A")} – {slotEndInIST.format("hh:mm A")}
+          {slotStartInIST.format(SLOT_TIME_FORMAT)} –{" "}
+          {slotEndInIST.format(SLOT_TIME_FORMAT)}
         </span>
         <span>
           <strong>{slot.title}</strong>
