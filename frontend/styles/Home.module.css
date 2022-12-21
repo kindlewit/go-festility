@@ -163,7 +163,7 @@
   /* font-size: 16px; */
   /* position: relative; */
   /* top: -200px; */
-  background: cornflowerblue;
+  background: #cdcdcd;
   border: none;
   border-radius: 0.75em;
 }
@@ -190,10 +190,9 @@
   font-size: 14px;
 }
 
-@media (max-width: 375px) {
+@media (max-width: 820px) {
   .flex_item {
     border-left: solid 0.175em indianred;
-    /* background-color: indianred; */
     /* text-align: center; */
     padding: 0.05em 0.1em;
     /* min-width: 124px; */
