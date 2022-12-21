@@ -7,3 +7,4 @@ festility
 # SAMPLE DATA
 data/*
 
+*/*.DS_Store
