@@ -7,10 +7,10 @@ import (
   "strconv"
 
   "github.com/gin-gonic/gin"
-  "festility/utils"
-  "festility/models"
-  "festility/services"
-  "festility/constants"
+  "github.com/kindlewit/go-festility/utils"
+  "github.com/kindlewit/go-festility/models"
+  "github.com/kindlewit/go-festility/services"
+  "github.com/kindlewit/go-festility/constants"
 )
 
 // Handles request to create a schedule for an existing fest.

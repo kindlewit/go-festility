@@ -1,10 +1,14 @@
 # ENV
 .env
+
+# BUILD FILES & FOLDERS
 bin/*
 fest-slotter
 festility
+go-festility
 
 # SAMPLE DATA
 data/*
 
+# MISC
 */*.DS_Store

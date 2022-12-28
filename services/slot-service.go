@@ -8,9 +8,9 @@ import (
   "go.mongodb.org/mongo-driver/mongo"
   "go.mongodb.org/mongo-driver/bson"
   "go.mongodb.org/mongo-driver/mongo/options"
-  "festility/utils"
-  "festility/models"
-  "festility/constants"
+  "github.com/kindlewit/go-festility/utils"
+  "github.com/kindlewit/go-festility/models"
+  "github.com/kindlewit/go-festility/constants"
 )
 
 // Creates new slot records & returns success.

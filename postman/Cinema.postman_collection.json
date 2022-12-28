@@ -1,0 +1,121 @@
+{
+	"info": {
+		"_postman_id": "67a99229-375c-48e5-84d4-2691c737362a",
+		"name": "Cinema",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22981282"
+	},
+	"item": [
+		{
+			"name": "Create cinema",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"cid\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"SPI Sathyam Cinemas\",\n    \"city\": \"Chennai\",\n    \"google_plus_code\": \"3745+45 Chennai, Tamil Nadu, India\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/cinema",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cinema"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get cinema",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/cinema/{{cid}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cinema",
+						"{{cid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create screens",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"name\": \"Sathyam\"\n    },\n    {\n        \"name\": \"Santham\"\n    },\n    {\n        \"name\": \"Serene\"\n    },\n    {\n        \"name\": \"Studio 5\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/cinema/{{cid}}/screen",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cinema",
+						"{{cid}}",
+						"screen"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get cinema screens",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/cinema/{{cid}}/screen",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cinema",
+						"{{cid}}",
+						"screen"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

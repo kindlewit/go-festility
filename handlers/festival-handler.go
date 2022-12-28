@@ -4,10 +4,10 @@ import (
   "net/http"
 
   "github.com/gin-gonic/gin"
-  "festility/models"
-  "festility/services"
-  "festility/constants"
-  "festility/utils"
+  "github.com/kindlewit/go-festility/models"
+  "github.com/kindlewit/go-festility/services"
+  "github.com/kindlewit/go-festility/constants"
+  "github.com/kindlewit/go-festility/utils"
 )
 
 // Handles request to create one festival.
