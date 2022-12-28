@@ -1,0 +1,119 @@
+{
+	"info": {
+		"_postman_id": "55b00563-d422-49f5-9fb7-b4fe296d0de0",
+		"name": "Schedule",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": ""
+	},
+	"item": [
+		{
+			"name": "Create Schedule",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"sid\", jsonData.schedule_id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"screen_id\": \"847\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 743563,\n        \"start_time\": 1639105200\n    },\n    {\n        \"screen_id\": \"847\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 587030,\n        \"start_time\": 1639128600\n    },\n    {\n        \"screen_id\": \"847\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 743563,\n        \"start_time\": 1639105200\n    },\n    {\n        \"screen_id\": \"847\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 587030,\n        \"start_time\": 1639128600\n    },\n    {\n        \"screen_id\": \"59\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 743563,\n        \"start_time\": 1639105200\n    },\n    {\n        \"screen_id\": \"847\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 587030,\n        \"start_time\": 1639128600\n    },\n    {\n        \"screen_id\": \"59\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 743563,\n        \"start_time\": 1639105200\n    },\n    {\n        \"screen_id\": \"59\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 587030,\n        \"start_time\": 1639128600\n    },\n    {\n        \"screen_id\": \"59\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 743563,\n        \"start_time\": 1639105200\n    },\n    {\n        \"screen_id\": \"59\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 587030,\n        \"start_time\": 1639128600\n    },\n    {\n        \"screen_id\": \"59\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 743563,\n        \"start_time\": 1639105200\n    },\n    {\n        \"screen_id\": \"847\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 587030,\n        \"start_time\": 1639128600\n    },\n    {\n        \"screen_id\": \"847\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 743563,\n        \"start_time\": 1639105200\n    },\n    {\n        \"screen_id\": \"59\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 587030,\n        \"start_time\": 1639128600\n    },\n    {\n        \"screen_id\": \"59\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 743563,\n        \"start_time\": 1639105200\n    },\n    {\n        \"screen_id\": \"847\",\n        \"slot_type\": \"movie\",\n        \"movie_id\": 587030,\n        \"start_time\": 1639128600\n    },\n    {\n        \"screen_id\": \"847\",\n        \"slot_type\": \"interview\",\n        \"title\": \"Baradwaj talks with Lokesh on Vikram\",\n        \"start_time\": 1639546200,\n        \"duration\": 120\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/fest/{{fid}}/schedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fest",
+						"{{fid}}",
+						"schedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Schedule",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/fest/{{fid}}/schedule/{{sid}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fest",
+						"{{fid}}",
+						"schedule",
+						"{{sid}}"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "7",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Default Schedule",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/fest/{{fid}}/schedule?date=2021-12-10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fest",
+						"{{fid}}",
+						"schedule"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2021-12-10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
