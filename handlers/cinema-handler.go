@@ -6,9 +6,9 @@ import (
   "math/rand"
 
   "github.com/gin-gonic/gin"
-  "festility/models"
-  "festility/services"
-  "festility/constants"
+  "github.com/kindlewit/go-festility/models"
+  "github.com/kindlewit/go-festility/services"
+  "github.com/kindlewit/go-festility/constants"
 )
 
 // Handles request to create a cinema.

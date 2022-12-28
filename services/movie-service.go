@@ -7,8 +7,8 @@ import (
   "io/ioutil"
   "encoding/json"
 
-  "festility/models"
-  "festility/constants"
+  "github.com/kindlewit/go-festility/models"
+  "github.com/kindlewit/go-festility/constants"
 )
 
 const BASE_URL = "https://api.themoviedb.org/3"

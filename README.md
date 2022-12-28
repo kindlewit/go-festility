@@ -9,11 +9,11 @@ Festility
 ```
 go build
 ```
-will create a new file that's named after the module **festility**.
+will create a new file that's named after the module **go-festility**.
 
 
 ```
-go run festility
+go run .
 # OR
 go run <package-name>
 ```

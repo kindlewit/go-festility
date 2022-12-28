@@ -3,7 +3,7 @@ package utils
 import (
   "regexp"
 
-  "festility/models"
+  "github.com/kindlewit/go-festility/models"
 )
 
 // Helps bind movie data into slot data model.

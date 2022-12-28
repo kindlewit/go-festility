@@ -7,8 +7,8 @@ import (
   "go.mongodb.org/mongo-driver/mongo"
   "go.mongodb.org/mongo-driver/bson"
   "go.mongodb.org/mongo-driver/mongo/options"
-  "festility/models"
-  "festility/constants"
+  "github.com/kindlewit/go-festility/models"
+  "github.com/kindlewit/go-festility/constants"
 )
 
 // Creates multiple new screen records.

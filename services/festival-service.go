@@ -6,8 +6,8 @@ import (
 
   "go.mongodb.org/mongo-driver/mongo"
   "go.mongodb.org/mongo-driver/bson"
-  "festility/models"
-  "festility/constants"
+  "github.com/kindlewit/go-festility/models"
+  "github.com/kindlewit/go-festility/constants"
 )
 
 

@@ -5,8 +5,8 @@ import (
   "net/http"
 
   "github.com/gin-gonic/gin"
-  "festility/services"
-  "festility/constants"
+  "github.com/kindlewit/go-festility/services"
+  "github.com/kindlewit/go-festility/constants"
 )
 
 // Handles requests to index (/) endpoint.
