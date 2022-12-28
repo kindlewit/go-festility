@@ -1,77 +1,77 @@
 /* All db services go here */
 package main
 
-import (
-  "os"
-  "fmt"
-  "net/http"
-  "io/ioutil"
-  "encoding/json"
-)
+// import (
+//   "os"
+//   "fmt"
+//   "net/http"
+//   "io/ioutil"
+//   "encoding/json"
+// )
 
-const BASE_URL = "https://api.themoviedb.org/3"
+// const BASE_URL = "https://api.themoviedb.org/3"
 
-// Fetch movie details from TMDB API
-func getMovie(movieId string) (doc *TMDBmovie, success bool) {
-  var API_KEY = os.Getenv("API_KEY");
+// // Fetch movie details from TMDB API
+// func getMovie(movieId string) (doc *TMDBmovie, success bool) {
+//   var API_KEY = os.Getenv("API_KEY");
 
-  // Read https://developers.themoviedb.org/3/movies/get-movie-details
-  resp, err := http.Get(fmt.Sprintf("%s/movie/%s?api_key=%s",BASE_URL, movieId, API_KEY));
-  if err != nil {
-    panic(err);
-    return nil, false;
-  }
-  defer resp.Body.Close();
-  // TODO: status check
-  body, err := ioutil.ReadAll(resp.Body);
-  if err != nil {
-    panic(err);
-    return nil, false;
-  }
+//   // Read https://developers.themoviedb.org/3/movies/get-movie-details
+//   resp, err := http.Get(fmt.Sprintf("%s/movie/%s?api_key=%s",BASE_URL, movieId, API_KEY));
+//   if err != nil {
+//     panic(err);
+//     return nil, false;
+//   }
+//   defer resp.Body.Close();
+//   // TODO: status check
+//   body, err := ioutil.ReadAll(resp.Body);
+//   if err != nil {
+//     panic(err);
+//     return nil, false;
+//   }
 
-  err = json.Unmarshal(body, &doc);
-  if err != nil {
-    panic(err);
-    return nil, false;
-  }
+//   err = json.Unmarshal(body, &doc);
+//   if err != nil {
+//     panic(err);
+//     return nil, false;
+//   }
 
-  return doc, true;
-}
+//   return doc, true;
+// }
 
-// Get director details of a movie id from TMDB API
-func getDirector(movieId string) []string {
-  var API_KEY = os.Getenv("API_KEY");
+// // Get director details of a movie id from TMDB API
+// func getDirector(movieId string) []string {
+//   var API_KEY = os.Getenv("API_KEY");
 
-  var castsList struct {
-    Crew  []Crew  `json:"crew"`
-  };
+//   var castsList struct {
+//     Crew  []Crew  `json:"crew"`
+//   };
 
-  // Read https://developers.themoviedb.org/3/movies/get-movie-credits
-  resp, err := http.Get(fmt.Sprintf("%s/movie/%s/credits?api_key=%s", BASE_URL, movieId, API_KEY));
-  if err != nil {
-    panic(err);
-    return []string{};
-  }
-  defer resp.Body.Close();
-  // TODO: status check
-  body, err := ioutil.ReadAll(resp.Body);
-  if err != nil {
-    panic(err);
-    return []string{};
-  }
+//   // Read https://developers.themoviedb.org/3/movies/get-movie-credits
+//   resp, err := http.Get(fmt.Sprintf("%s/movie/%s/credits?api_key=%s", BASE_URL, movieId, API_KEY));
+//   if err != nil {
+//     panic(err);
+//     return []string{};
+//   }
+//   defer resp.Body.Close();
+//   // TODO: status check
+//   body, err := ioutil.ReadAll(resp.Body);
+//   if err != nil {
+//     panic(err);
+//     return []string{};
+//   }
 
-  err = json.Unmarshal(body, &castsList);
+//   err = json.Unmarshal(body, &castsList);
 
-  directors := []string{}
+//   directors := []string{}
 
-  for i := 0; i < len(castsList.Crew); i++ {
-    if castsList.Crew[i].Job == "Director" {
-      directors = append(directors, castsList.Crew[i].Name);
-    }
-  }
+//   for i := 0; i < len(castsList.Crew); i++ {
+//     if castsList.Crew[i].Job == "Director" {
+//       directors = append(directors, castsList.Crew[i].Name);
+//     }
+//   }
 
-  return directors;
-}
+//   return directors;
+// }
 
 // func getGenre(ids []string) []Genre {
 //   var API_KEY = os.Getenv("API_KEY");
@@ -113,37 +113,37 @@ func getDirector(movieId string) []string {
 // }
 
 // Get list of movie ids for a list from TMDB API
-func getListMovieIds(id string) []string {
-  var API_KEY = os.Getenv("API_KEY");
+// func getListMovieIds(id string) []string {
+//   var API_KEY = os.Getenv("API_KEY");
 
-  // Read https://developers.themoviedb.org/3/lists/get-list-details
-  resp, err := http.Get(fmt.Sprintf("%s/list/%s?api_key=%s", BASE_URL, id, API_KEY));
-  if err != nil {
-    panic(err);
-    return []string{};
-  }
-  defer resp.Body.Close();
-  // TODO: status check
-  body, err := ioutil.ReadAll(resp.Body);
-  if err != nil {
-    panic(err);
-    return []string{};
-  }
+//   // Read https://developers.themoviedb.org/3/lists/get-list-details
+//   resp, err := http.Get(fmt.Sprintf("%s/list/%s?api_key=%s", BASE_URL, id, API_KEY));
+//   if err != nil {
+//     panic(err);
+//     return []string{};
+//   }
+//   defer resp.Body.Close();
+//   // TODO: status check
+//   body, err := ioutil.ReadAll(resp.Body);
+//   if err != nil {
+//     panic(err);
+//     return []string{};
+//   }
 
-  var list struct {
-    Items   []TMDBmovie `json:"items"`
-    Count   int         `json:"item_count"`
-  }
+//   var list struct {
+//     Items   []TMDBmovie `json:"items"`
+//     Count   int         `json:"item_count"`
+//   }
 
-  err = json.Unmarshal(body, &list);
-  if err != nil {
-    panic(err);
-    return []string{};
-  }
+//   err = json.Unmarshal(body, &list);
+//   if err != nil {
+//     panic(err);
+//     return []string{};
+//   }
 
-  idList := []string{};
-  for i := 0; i < len(list.Items); i++ {
-    idList = append(idList, fmt.Sprint(list.Items[i].Id));
-  }
-  return idList;
-}
+//   idList := []string{};
+//   for i := 0; i < len(list.Items); i++ {
+//     idList = append(idList, fmt.Sprint(list.Items[i].Id));
+//   }
+//   return idList;
+// }
