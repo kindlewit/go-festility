@@ -24,4 +24,5 @@ func SetupRouter(router *gin.Engine) {
 	router.GET("/cinema/:id", handlers.GetCinemaHandler)
 	router.POST("/cinema/:id/screen", handlers.AddCinemaScreensHandler)
 	router.GET("/cinema/:id/screen", handlers.GetCinemaScreensHandler)
+	// Avoid return as incoming pointer.
 }
