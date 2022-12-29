@@ -38,7 +38,3 @@ You're welcome, future me.
 ```
 docker run -d -p 27017:27017 mongo
 ```
-Connect & interact with the database through the terminal by the command
-```
-docker exec -it <container_name> mongo
-```
