@@ -30,7 +30,7 @@ func CreateFestivalHandler(c *gin.Context) {
 		return
 	}
 	if !success {
-		c.String(http.StatusConflict, MsgInconsistentId)
+		c.String(http.StatusConflict, constants.MsgInconsistentId)
 		return
 	}
 
