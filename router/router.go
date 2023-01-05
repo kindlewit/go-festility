@@ -5,8 +5,8 @@ import (
 	"github.com/kindlewit/go-festility/handlers"
 )
 
+// Helps bind the API path routes to the appropriate handlers.
 func SetupRouter(router *gin.Engine) {
-	// Bind routes & handlers
 	router.GET("/", handlers.IndexHandler)
 
 	router.GET("/movie/:id", handlers.GetMovieHandler)
