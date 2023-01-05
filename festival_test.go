@@ -1,4 +1,4 @@
-package tests
+package main
 
 import (
 	"bytes"
@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kindlewit/go-festility/constants"
 	"github.com/kindlewit/go-festility/models"
 	"github.com/kindlewit/go-festility/router"
+	"github.com/kindlewit/go-festility/services"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,6 +22,16 @@ var FEST_DATA_CORRECT = models.Fest{
 	Name: "Test Fest 101",
 	From: 1672294677,
 	To:   1672467473,
+}
+
+func startupFestival() func() {
+	fmt.Println("\n\n\n====\tStartup\t====")
+	services.Clear("festival")
+
+	return func() {
+		fmt.Println("\n\n\n====\tTeardown\t====")
+		services.Clear("festival")
+	}
 }
 
 func Test_WhenEmptyCreateFest_ShouldRetError(t *testing.T) {
@@ -95,4 +107,11 @@ func Test_WhenGetInvalidFest_ShouldRetError(t *testing.T) {
 
 	assert.Equal(t, http.StatusNotFound, w.Code, "Received different response status!")
 	assert.Equal(t, constants.MsgNoSuchRecord, w.Body.String())
+}
+
+func TestMain(m *testing.M) {
+	teardown := startupFestival()
+	code := m.Run()
+	teardown()
+	os.Exit(code)
 }
