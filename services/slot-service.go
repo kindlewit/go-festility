@@ -58,7 +58,7 @@ func GetScheduleSlots(client *mongo.Client, scheduleID string, optionals ...int6
   cursor, err := collection.Find(ctx, query, opts);
   if err != nil {
     fmt.Println(err.Error());
-    return records, constants.DetermineError(err);
+    return records, constants.DetermineInternalErrMsg(err);
   }
   defer cursor.Close(ctx);
 
@@ -87,7 +87,7 @@ func GetScheduleSlots(client *mongo.Client, scheduleID string, optionals ...int6
   }
   if err = cursor.Err(); err != nil {
     fmt.Println(err.Error());
-    return records, constants.DetermineError(err);
+    return records, constants.DetermineInternalErrMsg(err);
    }
 
   return records, nil;
@@ -117,7 +117,7 @@ func GetSlotScreensOfSchedule(client *mongo.Client, scheduleID string) (data []s
   cur, err := collection.Find(ctx, query, opts);
   if err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
   defer cur.Close(ctx);
 
@@ -134,7 +134,7 @@ func GetSlotScreensOfSchedule(client *mongo.Client, scheduleID string) (data []s
   }
   if err := cur.Err(); err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
 
   return data, nil;
@@ -164,7 +164,7 @@ func GetScheduleSlotsByTime(client *mongo.Client, scheduleID string, from int, t
   cur, err := collection.Find(ctx, query, opts);
   if err != nil {
     fmt.Println(err.Error());
-    return records, constants.DetermineError(err);
+    return records, constants.DetermineInternalErrMsg(err);
   }
   defer cur.Close(ctx);
 
@@ -208,7 +208,7 @@ func GetScheduleSlotsByTime(client *mongo.Client, scheduleID string, from int, t
   }
   if err := cur.Err(); err != nil {
     fmt.Println(err.Error());
-    return records, constants.DetermineError(err);
+    return records, constants.DetermineInternalErrMsg(err);
   }
 
   fmt.Println(len(movieHashMap));

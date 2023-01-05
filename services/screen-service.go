@@ -28,7 +28,7 @@ func CreateCinemaScreens(client *mongo.Client, screens []models.Screen) (success
   _, err = collection.InsertMany(ctx, data);
   if err != nil {
     fmt.Println(err.Error());
-    return false, constants.DetermineError(err);
+    return false, constants.DetermineInternalErrMsg(err);
   }
   return true, nil;
 }
@@ -45,7 +45,7 @@ func GetScreen(client *mongo.Client, screenID string) (data models.Screen, err e
   err = collection.FindOne(ctx, query).Decode(&data);
   if err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
 
   return data, nil;
@@ -63,7 +63,7 @@ func GetScreensInBulk(client *mongo.Client, screenIDlist []string) (data []model
   cursor, err := collection.Find(ctx, query);
   if err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
   defer cursor.Close(ctx);
 
@@ -80,7 +80,7 @@ func GetScreensInBulk(client *mongo.Client, screenIDlist []string) (data []model
   }
   if err = cursor.Err(); err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
 
   return data, nil;
@@ -99,7 +99,7 @@ func GetCinemaScreens(client *mongo.Client, cinemaID string) (data []models.Scre
   cursor, err := collection.Find(ctx, query, opts);
   if err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
   defer cursor.Close(ctx);
 
@@ -116,7 +116,7 @@ func GetCinemaScreens(client *mongo.Client, cinemaID string) (data []models.Scre
   }
   if err = cursor.Err(); err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
 
   return data, nil;
@@ -134,7 +134,7 @@ func ReplaceScreen(client *mongo.Client, screenID string, replacement models.Scr
   _, err = collection.ReplaceOne(ctx, query, replacement);
   if err != nil {
     fmt.Println(err.Error());
-    return false, constants.DetermineError(err);
+    return false, constants.DetermineInternalErrMsg(err);
   }
   return true, nil;
 }

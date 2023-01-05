@@ -23,7 +23,7 @@ func CreateCinema(client *mongo.Client, data models.Cinema) (bool, error) {
   count, err := collection.CountDocuments(ctx, query);
   if err != nil {
     fmt.Println(err.Error());
-    return false, constants.DetermineError(err);
+    return false, constants.DetermineInternalErrMsg(err);
   }
   if count > 0 {
     return false, constants.ErrDuplicateRecord; // Record already present
@@ -32,7 +32,7 @@ func CreateCinema(client *mongo.Client, data models.Cinema) (bool, error) {
   result, err := collection.InsertOne(ctx, data); // Assuming data is already sanitized
   if err != nil {
     fmt.Println(err.Error());
-    return false, constants.DetermineError(err);
+    return false, constants.DetermineInternalErrMsg(err);
   }
   return result.InsertedID != nil, nil;
 }
@@ -50,7 +50,7 @@ func GetCinema(client *mongo.Client, cinemaID string) (data models.Cinema, err e
   err = collection.FindOne(ctx, query).Decode(&data);
   if err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
 
   return data, nil;
@@ -68,7 +68,7 @@ func GetCinemasInBulk(client *mongo.Client, cinemaIDlist []string) (data []model
   cursor, err := collection.Find(ctx, query);
   if err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
   defer cursor.Close(ctx);
 
@@ -85,7 +85,7 @@ func GetCinemasInBulk(client *mongo.Client, cinemaIDlist []string) (data []model
   }
   if err = cursor.Err(); err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
 
   return data, nil;
@@ -104,7 +104,7 @@ func ReplaceCinema(client *mongo.Client, cinemaID string, replacement models.Cin
   _, err = collection.ReplaceOne(ctx, query, replacement);
   if err != nil {
     fmt.Println(err.Error());
-    return false, constants.DetermineError(err);
+    return false, constants.DetermineInternalErrMsg(err);
   }
   return true, nil;
 }
@@ -122,7 +122,7 @@ func DeleteCinema(client *mongo.Client, cinemaID string) (success bool, err erro
   _, err = collection.DeleteOne(ctx, query);
   if err != nil {
     fmt.Println(err.Error());
-    return false, constants.DetermineError(err);
+    return false, constants.DetermineInternalErrMsg(err);
   }
   return true, nil;
 }

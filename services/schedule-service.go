@@ -22,7 +22,7 @@ func CreateSchedule(client *mongo.Client, data models.Schedule) (bool, error) {
   count, err := collection.CountDocuments(ctx, bson.M{ "id": data.Id });
   if err != nil {
     fmt.Println(err.Error());
-    return false, constants.DetermineError(err);
+    return false, constants.DetermineInternalErrMsg(err);
   }
   if count > 0 {
     return false, constants.ErrDuplicateRecord; // Record already present
@@ -31,7 +31,7 @@ func CreateSchedule(client *mongo.Client, data models.Schedule) (bool, error) {
   _, err = collection.InsertOne(ctx, data);
   if err != nil {
     fmt.Println(err.Error());
-    return false, constants.DetermineError(err);
+    return false, constants.DetermineInternalErrMsg(err);
   }
   return true, nil;
 }
@@ -48,7 +48,7 @@ func GetSchedule(client *mongo.Client, festId string, scheduleId string) (data m
   err = collection.FindOne(ctx, query).Decode(&data);
   if err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
 
   return data, nil;
@@ -67,7 +67,7 @@ func GetDefaultScheduleID(client *mongo.Client, festId string) (string, error) {
   err := collection.FindOne(ctx, query).Decode(&record);
   if err != nil {
     fmt.Println(err.Error());
-    return "", constants.DetermineError(err);
+    return "", constants.DetermineInternalErrMsg(err);
   }
   return record.Id, nil;
 }

@@ -23,7 +23,7 @@ func CreateFestival(client *mongo.Client, data models.Fest) (bool, error) {
   count, err := collection.CountDocuments(ctx, bson.M{ "id": data.Id });
   if err != nil {
     fmt.Println(err.Error());
-    return false, constants.DetermineError(err);
+    return false, constants.DetermineInternalErrMsg(err);
   }
   if count > 0 {
     return false, constants.ErrDuplicateRecord; // Record already present
@@ -32,7 +32,7 @@ func CreateFestival(client *mongo.Client, data models.Fest) (bool, error) {
   result, err := collection.InsertOne(ctx, data);
   if err != nil {
     fmt.Println(err.Error());
-    return false, constants.DetermineError(err);
+    return false, constants.DetermineInternalErrMsg(err);
   }
 return result.InsertedID != nil, nil;
 }
@@ -50,7 +50,7 @@ func GetFestival(client *mongo.Client, fid string) (data models.Fest, err error)
   err = collection.FindOne(ctx, query).Decode(&data);
   if err != nil {
     fmt.Println(err.Error());
-    return data, constants.DetermineError(err);
+    return data, constants.DetermineInternalErrMsg(err);
   }
 
   return data, nil;
