@@ -1,4 +1,4 @@
-package main
+package tests
 
 import (
 	"bytes"
@@ -9,10 +9,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/gin-gonic/gin"
 	"github.com/kindlewit/go-festility/constants"
 	"github.com/kindlewit/go-festility/models"
-	"github.com/kindlewit/go-festility/router"
 	"github.com/kindlewit/go-festility/services"
 	"github.com/stretchr/testify/assert"
 )
@@ -35,8 +33,8 @@ func startupFestival() func() {
 }
 
 func Test_WhenEmptyCreateFest_ShouldRetError(t *testing.T) {
-	app := gin.Default()
-	router.SetupRouter(app)
+	// app := gin.Default()
+	// router.SetupRouter(app)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("POST", "/fest", nil)
@@ -47,8 +45,8 @@ func Test_WhenEmptyCreateFest_ShouldRetError(t *testing.T) {
 }
 
 func Test_WhenCreateFest_ShouldRetSuccess(t *testing.T) {
-	app := gin.Default()
-	router.SetupRouter(app)
+	// app := gin.Default()
+	// router.SetupRouter(app)
 
 	w := httptest.NewRecorder()
 
@@ -66,8 +64,8 @@ func Test_WhenCreateFest_ShouldRetSuccess(t *testing.T) {
 }
 
 func Test_WhenDuplicateCreateFest_ShouldRetError(t *testing.T) {
-	app := gin.Default()
-	router.SetupRouter(app)
+	// app := gin.Default()
+	// router.SetupRouter(app)
 
 	w := httptest.NewRecorder()
 
@@ -85,8 +83,8 @@ func Test_WhenDuplicateCreateFest_ShouldRetError(t *testing.T) {
 }
 
 func Test_WhenGetFest_ShouldRetData(t *testing.T) {
-	app := gin.Default()
-	router.SetupRouter(app)
+	// app := gin.Default()
+	// router.SetupRouter(app)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/fest/%s", FEST_DATA_CORRECT.Id), nil)
@@ -98,8 +96,8 @@ func Test_WhenGetFest_ShouldRetData(t *testing.T) {
 }
 
 func Test_WhenGetInvalidFest_ShouldRetError(t *testing.T) {
-	app := gin.Default()
-	router.SetupRouter(app)
+	// app := gin.Default()
+	// router.SetupRouter(app)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/fest/Nope", nil)
