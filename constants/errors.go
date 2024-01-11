@@ -2,6 +2,7 @@ package constants
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -16,8 +17,12 @@ var (
 	MsgDataParse         string = "Faced an error while parsing internal data. Please try again."
 	MsgEmptyData         string = "Data being requested does not exist."
 	MsgNoSchedule        string = "No schedule available for this fest yet."
+	MsgApiFetch          string = "Error fetching data from external service."
 	MsgMissingFestParams string = "Required parameters missing: id/name/from_date/to_date."
 	MsgInconsistentId    string = "Record was created but found an inconsistency in record id."
+	MsgConversion        string = "Faced an error while converting internal data. Please try again."
+	MsgUnauthorized      string = "Unauthorized to commit this action."
+	MsgMissingApiKey     string = "Key for external API is missing."
 )
 
 var (
@@ -28,21 +33,31 @@ var (
 	ErrDataParse         error = errors.New(MsgDataParse)
 	ErrEmptyData         error = errors.New(MsgEmptyData)
 	ErrNoDefaultSchedule error = errors.New(MsgNoSchedule)
-	ErrApiFetch          error = errors.New("ErrApiFetch")
+	ErrApiFetch          error = errors.New(MsgApiFetch)
 	ErrApiParse          error = errors.New("ErrApiParse")
+	ErrConversion        error = errors.New(MsgConversion)
+	ErrUnauthorized      error = errors.New(MsgUnauthorized)
+	ErrMissingApiKey     error = errors.New(MsgMissingApiKey)
 )
 
 // Determines which custom error to throw based on error received.
 func DetermineInternalErrMsg(err error) error {
+	if err == nil {
+		return nil
+	}
+
+	fmt.Println(err.Error())
 	if strings.Contains(err.Error(), "server selection error: context deadline exceeded") {
 		// Caught DB connection error
 		return ErrConnection
+	}
+	if strings.Contains(err.Error(), "conversion") || strings.Contains(err.Error(), "InvalidUnmarshalError") {
+		return ErrConversion
 	}
 	if err.Error() == "mongo: no documents in result" {
 		// Caught a "mongo: no documents in result" error
 		return ErrNoSuchRecord
 	}
-
 	return ErrMongo
 }
 
@@ -76,6 +91,10 @@ func HandleError(c *gin.Context, err error) {
 	case ErrNoDefaultSchedule:
 		{
 			c.String(http.StatusNotFound, MsgNoSchedule)
+		}
+	case ErrConversion:
+		{
+			c.String(http.StatusInternalServerError, MsgConversion)
 		}
 	default:
 		{
