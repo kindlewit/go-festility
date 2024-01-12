@@ -1,9 +1,14 @@
 package services
 
 import (
+	"context"
+	"fmt"
+
 	"github.com/kindlewit/go-festility/constants"
 	"github.com/kindlewit/go-festility/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // Creates new cinema record.
@@ -33,71 +38,67 @@ func GetCinema(cinemaID string) (doc models.Cinema, err error) {
 	return doc, constants.DetermineInternalErrMsg(err)
 }
 
-// // Fetches multiple cinema records.
-// func GetCinemasInBulk(client *mongo.Client, cinemaIDlist []string) (data []models.Screen, err error) {
-// 	collection := client.Database("festility").Collection("cinema") // Collection to use
-// 	query := bson.M{"id": bson.M{"$in": cinemaIDlist}}
+// Fetches multiple cinema records.
+func GetCinemasInBulk(cinemaIDlist []string) (docs []models.Cinema, err error) {
+	// TODO: include limit to reduce DB querying
+	query := bson.M{"id": bson.M{"$in": cinemaIDlist}}
+	opts := options.Find() // TODO: optimize search using options
+	cursor, err := db.RetrieveMany(constants.TableCinema, query, opts)
+	defer db.Disconnect()
 
-// 	// Create context
-// 	ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout)
-// 	defer cancel()
+	if err != nil {
+		return docs, constants.DetermineInternalErrMsg(err)
+	}
 
-// 	cursor, err := collection.Find(ctx, query)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		return data, constants.DetermineInternalErrMsg(err)
-// 	}
-// 	defer cursor.Close(ctx)
+	docs, err = _getCinemasFromCursor(cursor)
+	return docs, constants.DetermineInternalErrMsg(err)
+}
 
-// 	for cursor.Next(ctx) { // Iterate cursor
-// 		var d models.Screen
+// Replaces a cinema record by id.
+func ReplaceCinema(cinemaID string, replacement models.Cinema) (success bool, err error) {
+	if replacement.Id != cinemaID {
+		// Trying to update screen ID
+		return false, constants.ErrCriticalVal
+	}
+	query := bson.M{"id": cinemaID}
+	result, err := db.Replace(constants.TableCinema, query, replacement)
+	defer db.Disconnect()
 
-// 		err = cursor.Decode(&d) // Decode cursor data into model
-// 		if err != nil {
-// 			fmt.Println(err.Error())
-// 			return data, constants.ErrDataParse
-// 		}
+	if err != nil {
+		return false, constants.DetermineInternalErrMsg(err)
+	}
 
-// 		data = append(data, d) // Push data record into array
-// 	}
-// 	if err = cursor.Err(); err != nil {
-// 		fmt.Println(err.Error())
-// 		return data, constants.DetermineInternalErrMsg(err)
-// 	}
+	return result.ModifiedCount > 0, constants.DetermineInternalErrMsg(err)
+}
 
-// 	return data, nil
-// }
+// Deletes the cinema record by id.
+func DeleteCinema(cinemaID string) (bool, error) {
+	query := bson.M{"id": cinemaID}
+	success, err := db.DeleteOne(constants.TableCinema, query)
+	defer db.Disconnect()
+	return success.DeletedCount > 0, constants.DetermineInternalErrMsg(err)
+}
 
-// // Updates a cinema record by id.
-// func ReplaceCinema(client *mongo.Client, cinemaID string, replacement models.Cinema) (success bool, err error) {
-// 	collection := client.Database("festility").Collection("cinema") // Collection to use
-// 	query := bson.M{"id": cinemaID}
+func _getCinemasFromCursor(cursor *mongo.Cursor) (docs []models.Cinema, err error) {
+	// Create temp context for cursor close
+	ctx, cancel := context.WithTimeout(context.Background(), constants.CursorTimeout)
+	defer cancel()
+	defer cursor.Close(ctx)
 
-// 	// Create context
-// 	ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout)
-// 	defer cancel()
+	for cursor.Next(ctx) { // Iterate cursor
+		var d models.Cinema
 
-// 	_, err = collection.ReplaceOne(ctx, query, replacement)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		return false, constants.DetermineInternalErrMsg(err)
-// 	}
-// 	return true, nil
-// }
+		err = cursor.Decode(&d) // Decode cursor data into model
+		if err != nil {
+			fmt.Println(err.Error())
+			return docs, constants.ErrDataParse
+		}
 
-// // Deletes the cinema record by id.
-// func DeleteCinema(client *mongo.Client, cinemaID string) (success bool, err error) {
-// 	collection := client.Database("festility").Collection("cinema") // Collection to use
-// 	query := bson.M{"id": cinemaID}
+		docs = append(docs, d) // Push data record into array
+	}
+	if err = cursor.Err(); err != nil {
+		fmt.Println(err.Error())
+	}
 
-// 	// Create context
-// 	ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout)
-// 	defer cancel()
-
-// 	_, err = collection.DeleteOne(ctx, query)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		return false, constants.DetermineInternalErrMsg(err)
-// 	}
-// 	return true, nil
-// }
+	return docs, err
+}
