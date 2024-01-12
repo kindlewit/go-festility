@@ -67,8 +67,12 @@ func GetCinemaScreens(cinemaID string) (docs []models.Screen, err error) {
 	return docs, constants.DetermineInternalErrMsg(err)
 }
 
-// Updates a screen record by id.
+// Replaces a screen record by id.
 func ReplaceScreen(screenID string, replacement models.Screen) (success bool, err error) {
+	if replacement.Id != screenID {
+		// Trying to update screen ID
+		return false, constants.ErrCriticalVal
+	}
 	query := bson.M{"id": screenID}
 	result, err := db.Replace(constants.TableScreen, query, replacement)
 	defer db.Disconnect()
