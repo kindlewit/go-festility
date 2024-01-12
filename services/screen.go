@@ -25,8 +25,8 @@ func CreateCinemaScreens(screens []models.Screen) (success bool, err error) {
 }
 
 // Fetches one screen record by screen id.
-func GetScreen(screenID string) (doc models.Screen, err error) {
-	query := bson.M{"id": screenID}
+func GetScreen(screenId string) (doc models.Screen, err error) {
+	query := bson.M{"id": screenId}
 	data, err := db.Retrieve(constants.TableScreen, query)
 	defer db.Disconnect()
 	if err != nil {
@@ -53,8 +53,8 @@ func GetScreensInBulk(screenList []string) (docs []models.Screen, err error) {
 }
 
 // Fetches screens for a cinema by cinema id.
-func GetCinemaScreens(cinemaID string) (docs []models.Screen, err error) {
-	query := bson.M{"cinema_id": cinemaID}
+func GetCinemaScreens(cinemaId string) (docs []models.Screen, err error) {
+	query := bson.M{"cinema_id": cinemaId}
 	opts := options.Find() // TODO: optimize search using options
 	cursor, err := db.RetrieveMany(constants.TableScreen, query, opts)
 	defer db.Disconnect()
@@ -68,12 +68,12 @@ func GetCinemaScreens(cinemaID string) (docs []models.Screen, err error) {
 }
 
 // Replaces a screen record by id.
-func ReplaceScreen(screenID string, replacement models.Screen) (success bool, err error) {
-	if replacement.Id != screenID {
+func ReplaceScreen(screenId string, replacement models.Screen) (success bool, err error) {
+	if replacement.Id != screenId {
 		// Trying to update screen ID
 		return false, constants.ErrCriticalVal
 	}
-	query := bson.M{"id": screenID}
+	query := bson.M{"id": screenId}
 	result, err := db.Replace(constants.TableScreen, query, replacement)
 	defer db.Disconnect()
 

@@ -26,8 +26,8 @@ func CreateCinema(data models.Cinema) (bool, error) {
 }
 
 // Fetches the cinema record by id.
-func GetCinema(cinemaID string) (doc models.Cinema, err error) {
-	query := bson.M{"id": cinemaID}
+func GetCinema(cinemaId string) (doc models.Cinema, err error) {
+	query := bson.M{"id": cinemaId}
 	data, err := db.Retrieve(constants.TableCinema, query)
 	defer db.Disconnect()
 	if err != nil {
@@ -39,9 +39,9 @@ func GetCinema(cinemaID string) (doc models.Cinema, err error) {
 }
 
 // Fetches multiple cinema records.
-func GetCinemasInBulk(cinemaIDlist []string) (docs []models.Cinema, err error) {
+func GetCinemasInBulk(cinemaIdList []string) (docs []models.Cinema, err error) {
 	// TODO: include limit to reduce DB querying
-	query := bson.M{"id": bson.M{"$in": cinemaIDlist}}
+	query := bson.M{"id": bson.M{"$in": cinemaIdList}}
 	opts := options.Find() // TODO: optimize search using options
 	cursor, err := db.RetrieveMany(constants.TableCinema, query, opts)
 	defer db.Disconnect()
@@ -55,12 +55,12 @@ func GetCinemasInBulk(cinemaIDlist []string) (docs []models.Cinema, err error) {
 }
 
 // Replaces a cinema record by id.
-func ReplaceCinema(cinemaID string, replacement models.Cinema) (success bool, err error) {
-	if replacement.Id != cinemaID {
+func ReplaceCinema(cinemaId string, replacement models.Cinema) (success bool, err error) {
+	if replacement.Id != cinemaId {
 		// Trying to update screen ID
 		return false, constants.ErrCriticalVal
 	}
-	query := bson.M{"id": cinemaID}
+	query := bson.M{"id": cinemaId}
 	result, err := db.Replace(constants.TableCinema, query, replacement)
 	defer db.Disconnect()
 
@@ -72,8 +72,8 @@ func ReplaceCinema(cinemaID string, replacement models.Cinema) (success bool, er
 }
 
 // Deletes the cinema record by id.
-func DeleteCinema(cinemaID string) (bool, error) {
-	query := bson.M{"id": cinemaID}
+func DeleteCinema(cinemaId string) (bool, error) {
+	query := bson.M{"id": cinemaId}
 	success, err := db.DeleteOne(constants.TableCinema, query)
 	defer db.Disconnect()
 	return success.DeletedCount > 0, constants.DetermineInternalErrMsg(err)

@@ -36,7 +36,7 @@ func GetSchedule(festId string, scheduleId string) (doc models.Schedule, err err
 }
 
 // Fetches the default schedule ID for a festival.
-func GetDefaultScheduleID(festId string) (string, error) {
+func GetDefaultScheduleId(festId string) (string, error) {
 	var doc models.Schedule
 
 	query := bson.M{"fest_id": festId, "custom": false} // Default schedule will have Custom=false

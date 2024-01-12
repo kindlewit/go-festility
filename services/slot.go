@@ -26,7 +26,7 @@ func CreateSlots(slots []models.Slot) (bool, error) {
 
 // Fetches all slots for a given schedule id.
 // optionals: [limit, skip]
-func GetScheduleSlots(scheduleID string, optionals ...int64) (docs []models.Slot, err error) {
+func GetScheduleSlots(scheduleId string, optionals ...int64) (docs []models.Slot, err error) {
 	var limit int64 = int64(constants.SlotPageLimit)
 	var skip int64 = int64(0)
 
@@ -37,7 +37,7 @@ func GetScheduleSlots(scheduleID string, optionals ...int64) (docs []models.Slot
 		skip = optionals[1]
 	}
 
-	query := bson.M{"schedule_id": scheduleID}
+	query := bson.M{"schedule_id": scheduleId}
 	opts := options.Find().SetLimit(limit).SetSkip(skip)
 
 	cursor, err := db.RetrieveMany(constants.TableScreen, query, opts)
@@ -52,8 +52,8 @@ func GetScheduleSlots(scheduleID string, optionals ...int64) (docs []models.Slot
 }
 
 // // Fetches screen ID list of slots for a given schedule id.
-func GetScheduleScreenList(scheduleID string, optionals ...int64) (docs []string, err error) {
-	query := bson.M{"schedule_id": scheduleID}
+func GetScheduleScreenList(scheduleId string, optionals ...int64) (docs []string, err error) {
+	query := bson.M{"schedule_id": scheduleId}
 	// Omission options (keys to include/omit)
 	opts := options.Find().SetProjection(bson.M{
 		"duration":       0,
@@ -75,14 +75,14 @@ func GetScheduleScreenList(scheduleID string, optionals ...int64) (docs []string
 		return docs, constants.DetermineInternalErrMsg(err)
 	}
 
-	docs, err = _getScreenIDFromCursor(cursor)
+	docs, err = _getScreenIdFromCursor(cursor)
 	return docs, constants.DetermineInternalErrMsg(err)
 }
 
 // Fetches all slots between given from and to time.
-func GetScheduleSlotsByTime(scheduleID string, from int, to int) (docs []models.Slot, err error) {
+func GetScheduleSlotsByTime(scheduleId string, from int, to int) (docs []models.Slot, err error) {
 	query := bson.M{
-		"schedule_id": scheduleID,
+		"schedule_id": scheduleId,
 		"start_time":  bson.M{"$gte": from, "$lt": to}, // Show start between given params
 	}
 	// Omission options (keys to include/omit)
@@ -163,7 +163,7 @@ func _getSlotsFromCursor(cursor *mongo.Cursor) (docs []models.Slot, err error) {
 	return docs, err
 }
 
-func _getScreenIDFromCursor(cursor *mongo.Cursor) (docs []string, err error) {
+func _getScreenIdFromCursor(cursor *mongo.Cursor) (docs []string, err error) {
 	// Create temp context for cursor close
 	ctx, cancel := context.WithTimeout(context.Background(), constants.CursorTimeout)
 	defer cancel()
@@ -177,8 +177,8 @@ func _getScreenIDFromCursor(cursor *mongo.Cursor) (docs []string, err error) {
 			fmt.Println(err.Error())
 			return docs, constants.ErrDataParse
 		}
-		if d.ScreenID != "" {
-			docs = append(docs, d.ScreenID)
+		if d.ScreenId != "" {
+			docs = append(docs, d.ScreenId)
 		} // Do not break if slots are missing screen ID (might interview/other)
 	}
 	if err = cursor.Err(); err != nil {

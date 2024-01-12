@@ -44,14 +44,14 @@ func HandleGetCinema(c *gin.Context) {
 	var doc models.Cinema
 	var err error
 
-	cinemaID := c.Param("id")
-	if cinemaID == "" || cinemaID == "null" {
+	cinemaId := c.Param("id")
+	if cinemaId == "" || cinemaId == "null" {
 		// Missing cinema ID param
 		c.JSON(http.StatusBadRequest, "Missing valid cinema id. Please check the parameter.")
 		return
 	}
 
-	doc, err = services.GetCinema(cinemaID)
+	doc, err = services.GetCinema(cinemaId)
 	if err != nil {
 		constants.HandleError(c, err)
 		return
@@ -67,8 +67,8 @@ func HandleAddCinemaScreens(c *gin.Context) {
 	var success bool
 	var err error
 
-	cinemaID := c.Param("id")
-	if cinemaID == "" || cinemaID == "null" {
+	cinemaId := c.Param("id")
+	if cinemaId == "" || cinemaId == "null" {
 		// Missing cinema ID param
 		c.JSON(http.StatusBadRequest, "Missing valid cinema id. Please check the parameter.")
 		return
@@ -81,7 +81,7 @@ func HandleAddCinemaScreens(c *gin.Context) {
 
 	// Ensure all records have same cinema ID.
 	for i := 0; i < len(body); i++ {
-		body[i].CinemaID = cinemaID
+		body[i].CinemaId = cinemaId
 		// Add screen ID
 		body[i].Id = fmt.Sprintf("%d", rand.Intn(1000)) // Random id b/w 0 - 1000
 	}
@@ -97,7 +97,7 @@ func HandleAddCinemaScreens(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"cinema_id":         cinemaID,
+		"cinema_id":         cinemaId,
 		"number_of_screens": len(body),
 	})
 }
@@ -107,14 +107,14 @@ func HandleGetCinemaScreens(c *gin.Context) {
 	var resp []models.Screen
 	var err error
 
-	cinemaID := c.Param("id")
-	if cinemaID == "" || cinemaID == "null" {
+	cinemaId := c.Param("id")
+	if cinemaId == "" || cinemaId == "null" {
 		// Missing cinema ID param
 		c.JSON(http.StatusBadRequest, "Missing valid cinema id. Please check the parameter.")
 		return
 	}
 
-	resp, err = services.GetCinemaScreens(cinemaID)
+	resp, err = services.GetCinemaScreens(cinemaId)
 	if err != nil {
 		constants.HandleError(c, err)
 		return
