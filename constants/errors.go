@@ -23,6 +23,7 @@ var (
 	MsgConversion        string = "Faced an error while converting internal data. Please try again."
 	MsgUnauthorized      string = "Unauthorized to commit this action."
 	MsgMissingApiKey     string = "Key for external API is missing."
+	MsgCriticalVal       string = "Attempt to update a critical value in the DB."
 )
 
 var (
@@ -38,6 +39,7 @@ var (
 	ErrConversion        error = errors.New(MsgConversion)
 	ErrUnauthorized      error = errors.New(MsgUnauthorized)
 	ErrMissingApiKey     error = errors.New(MsgMissingApiKey)
+	ErrCriticalVal       error = errors.New(MsgCriticalVal)
 )
 
 // Determines which custom error to throw based on error received.
@@ -95,6 +97,18 @@ func HandleError(c *gin.Context, err error) {
 	case ErrConversion:
 		{
 			c.String(http.StatusInternalServerError, MsgConversion)
+		}
+	case ErrUnauthorized:
+		{
+			c.String(http.StatusUnauthorized, MsgUnauthorized)
+		}
+	case ErrMissingApiKey:
+		{
+			c.String(http.StatusConflict, MsgMissingApiKey)
+		}
+	case ErrCriticalVal:
+		{
+			c.String(http.StatusBadRequest, MsgCriticalVal)
 		}
 	default:
 		{
