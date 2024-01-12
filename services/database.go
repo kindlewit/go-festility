@@ -119,7 +119,7 @@ func (d Database) RetrieveMany(tableName string, query bson.M, opts *options.Fin
 	return collection.Find(ctx, query, opts)
 }
 
-// Replace one record in a table.
+// Replaces one record in a table.
 func (d Database) Replace(tableName string, query bson.M, replacement interface{}) (*mongo.UpdateResult, error) {
 	client := d.GetConnection()
 	collection := client.Database(constants.DatabaseName).Collection(tableName)
@@ -129,4 +129,16 @@ func (d Database) Replace(tableName string, query bson.M, replacement interface{
 	defer cancel()
 
 	return collection.ReplaceOne(ctx, query, replacement)
+}
+
+// Removes one record from a table.
+func (d Database) DeleteOne(tableName string, query bson.M) (*mongo.DeleteResult, error) {
+	client := d.GetConnection()
+	collection := client.Database(constants.DatabaseName).Collection(tableName)
+
+	// Create context
+	ctx, cancel := context.WithTimeout(context.Background(), constants.QueryTimeout)
+	defer cancel()
+
+	return collection.DeleteOne(ctx, query)
 }
