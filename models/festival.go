@@ -12,8 +12,8 @@ type Slot struct {
 	// Common for both
 	Id         string `bson:"id" json:"id"`
 	Type       string `bson:"slot_type" json:"slot_type" binding:"required"`
-	ScheduleID string `bson:"schedule_id" json:"schedule_id"`
-	ScreenID   string `bson:"screen_id" json:"screen_id" binding:"required"`
+	ScheduleId string `bson:"schedule_id" json:"schedule_id"`
+	ScreenId   string `bson:"screen_id" json:"screen_id" binding:"required"`
 	Start      int    `bson:"start_time" json:"start_time"`
 	Duration   int    `bson:"duration" json:"duration"`
 	// Movie specific
