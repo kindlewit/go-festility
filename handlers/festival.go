@@ -52,18 +52,18 @@ func HandleGetFest(c *gin.Context) {
 // 	var err error
 // 	var resp []models.CinemaScreen
 
-// 	festID := c.Param("id")
-// 	scheduleID, err := services.GetDefaultScheduleID(festID)
+// 	festId := c.Param("id")
+// 	scheduleId, err := services.GetDefaultScheduleId(festId)
 // 	if err != nil {
 // 		constants.HandleError(c, err)
 // 		return
 // 	}
-// 	screenIDList, err := services.GetSlotScreensOfSchedule(client, scheduleID)
+// 	screenIdList, err := services.GetSlotScreensOfSchedule(client, scheduleId)
 // 	if err != nil {
 // 		constants.HandleError(c, err)
 // 		return
 // 	}
-// 	screenList, err := services.GetScreensInBulk(client, screenIDList)
+// 	screenList, err := services.GetScreensInBulk(client, screenIdList)
 // 	if err != nil {
 // 		constants.HandleError(c, err)
 // 		return
@@ -72,12 +72,12 @@ func HandleGetFest(c *gin.Context) {
 // 	cinemaHashMap := make(map[string]models.Cinema)
 
 // 	for i := 0; i < len(screenList); i++ {
-// 		cID := screenList[i].CinemaID
-// 		if cinemaData, isPresent := cinemaHashMap[cID]; isPresent {
+// 		cId := screenList[i].CinemaId
+// 		if cinemaData, isPresent := cinemaHashMap[cId]; isPresent {
 // 			resp = append(resp, utils.BindCinemaToScreen(screenList[i], cinemaData))
 // 		} else {
-// 			cinemaHashMap[cID], err = services.GetCinema(client, cID)
-// 			resp = append(resp, utils.BindCinemaToScreen(screenList[i], cinemaHashMap[cID]))
+// 			cinemaHashMap[cId], err = services.GetCinema(client, cId)
+// 			resp = append(resp, utils.BindCinemaToScreen(screenList[i], cinemaHashMap[cId]))
 // 		}
 // 	}
 // 	// cinemaList, err := services.GetCinemasInBulk(client, cinemaHashMap.Keys());
