@@ -20,7 +20,7 @@ func CreateCinema(data models.Cinema) (bool, error) {
 		return false, constants.ErrDuplicateRecord // Record already present
 	}
 
-	success, err := db.Insert(constants.TableSchedule, data)
+	success, err := db.Insert(constants.TableCinema, data)
 	defer db.Disconnect()
 	return success.InsertedID != nil, constants.DetermineInternalErrMsg(err)
 }
