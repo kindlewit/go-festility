@@ -28,6 +28,9 @@ func GetMovie(movieId string) (data models.TMDBmovie, err error) {
 		return data, constants.ErrMissingApiKey
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode == 404 {
+		return data, constants.ErrNoSuchRecord
+	}
 	if resp.StatusCode != 200 {
 		return data, constants.ErrApiFetch
 	}
@@ -84,6 +87,46 @@ func GetDirector(movieId string) (data []string, err error) {
 		if castsList.Crew[i].Job == "Director" {
 			data = append(data, castsList.Crew[i].Name)
 		}
+	}
+
+	return data, nil
+}
+
+// Searches for a movie in TMDB
+func SearchMovie(term string) (data models.TMDBmovie, err error) {
+	var API_KEY = os.Getenv("API_KEY")
+	if API_KEY == "" {
+		return data, constants.ErrUnauthorized
+	}
+	// Read https://developer.themoviedb.org/reference/search-movie
+	urlStructure := "%s/search/movie?query=%s" // {BASE_URL}/search/movie?query={term}
+	url := fmt.Sprintf(urlStructure, BASE_URL, term)
+	authTokenHeader := fmt.Sprintf("Bearer: %s", API_KEY)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return data, constants.ErrApiFetch
+	}
+	req.Header.Set("Authorization", authTokenHeader)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return data, constants.ErrMissingApiKey
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return data, constants.ErrApiFetch
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err.Error())
+		return data, constants.ErrApiParse
+	}
+
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		fmt.Println(err.Error())
+		return data, constants.ErrApiParse
 	}
 
 	return data, nil
