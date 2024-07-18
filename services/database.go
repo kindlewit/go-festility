@@ -142,3 +142,10 @@ func (d Database) DeleteOne(tableName string, query bson.M) (*mongo.DeleteResult
 
 	return collection.DeleteOne(ctx, query)
 }
+
+func StatusCheck() bool {
+	db.GetConnection() // Open connection
+	db.Disconnect()    // Close connection
+
+	return true
+}
