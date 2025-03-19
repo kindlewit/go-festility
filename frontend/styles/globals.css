@@ -1,8 +1,13 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-primary-dark-bg: #4C1F7A;
-  --color-primary-dark-text: #EEEEEE;
+  --color-dark-bg-1: #2A004E;
+  --color-dark-text-1: #EEEEEE;
+  --color-dark-text-2: #219B9D;
+  --color-dark-bg-1: #500073;
+  --color-dark-bg-3: #C62300;
+  --color-dark-bg-4: #F14A00;
+  --color-dark-bg-5: #FF8000;
 }
 
 html,
