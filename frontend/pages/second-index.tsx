@@ -21,7 +21,7 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
+          Get started by editing
           <code className={styles.code}>pages/index.tsx</code>
         </p>
 
@@ -64,7 +64,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
@@ -147,7 +147,7 @@ export default function Home() {
                 </span>
               </div>
               <div className={styles.slot__duration}>
-                <span>130'</span>
+                <span>130&apos;</span>
               </div>
             </div>
             <div className={styles.slot_actions}>
@@ -177,7 +177,7 @@ export default function Home() {
                 </span>
               </div>
               <div className={styles.slot__duration}>
-                <span>130'</span>
+                <span>130&apos;</span>
               </div>
             </div>
             <div className={styles.slot_actions}>
