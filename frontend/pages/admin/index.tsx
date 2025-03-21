@@ -1,8 +1,11 @@
 import Head from "next/head";
 import { Fragment } from "react";
 import FestivalForm from "../../components/forms/FestivalForm";
+import dayjs from "dayjs";
 
 import styles from "../../styles/form";
+
+const EXPECTED_FORM_STRING_FORMAT = "YYYY-MM-DD";
 
 export default function AdminIndex() {
   return (
@@ -36,7 +39,7 @@ export default function AdminIndex() {
             <input
               type="date"
               name="from_date"
-              defaultValue={new Date().getTime()}
+              defaultValue={dayjs().format(EXPECTED_FORM_STRING_FORMAT)}
               className={styles.input}
             />
             <label htmlFor="name" className="font-semibold text-xl">
@@ -45,7 +48,7 @@ export default function AdminIndex() {
             <input
               type="date"
               name="to_date"
-              defaultValue={new Date().getTime()}
+              defaultValue={dayjs().format(EXPECTED_FORM_STRING_FORMAT)}
               className={styles.input}
             />
             <button
