@@ -1,6 +1,7 @@
 import React, { Fragment, ReactNode, useActionState } from "react";
 
 import styles from "../../styles/form";
+import { generateUniqueFestId } from "../../util/fest";
 
 type FestivalFormProps = {
   children: ReactNode;
@@ -13,10 +14,10 @@ export default function FestivalForm({
 }: FestivalFormProps) {
   const handleCreateFestival = async (prevState: any, formData: any) => {
     const festDict = {
-      id: "fest1011",
       name: formData.get("name"),
       from_date: new Date(formData.get("from_date")).getTime(),
       to_date: new Date(formData.get("to_date")).getTime(),
+      id: generateUniqueFestId(formData.get("name")),
     };
 
     const res = await fetch("http://localhost:8080/fest", {
