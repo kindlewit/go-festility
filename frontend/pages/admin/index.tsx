@@ -24,33 +24,58 @@ export default function AdminIndex() {
 
         <div>
           <FestivalForm>
-            <label htmlFor="name" className="font-semibold text-xl">
-              Festival name
-            </label>
+            <div className="flex flex-row w-full space-between">
+              <label htmlFor="name" className="font-semibold text-xl">
+                Festival name
+              </label>
+              <span className="font-light text-red-600"> *</span>
+            </div>
             <input
               type="text"
               name="name"
               placeholder="Festival name"
               className={styles.input}
+              required={true}
             />
-            <label htmlFor="name" className="font-semibold text-xl">
-              Start date
-            </label>
+
+            <div className="flex flex-row w-full space-between">
+              <label htmlFor="from_date" className="font-semibold text-xl">
+                Start date
+              </label>
+              <span className="font-light text-red-600"> *</span>
+            </div>
             <input
               type="date"
               name="from_date"
               defaultValue={dayjs().format(EXPECTED_FORM_STRING_FORMAT)}
               className={styles.input}
+              required={true}
             />
-            <label htmlFor="name" className="font-semibold text-xl">
-              End date
-            </label>
+
+            <div className="flex flex-row w-full space-between">
+              <label htmlFor="to_date" className="font-semibold text-xl">
+                End date
+              </label>
+              <span className="font-light text-red-600">*</span>
+            </div>
             <input
               type="date"
               name="to_date"
               defaultValue={dayjs().format(EXPECTED_FORM_STRING_FORMAT)}
               className={styles.input}
+              required={true}
             />
+
+            <label htmlFor="name" className="font-semibold text-xl">
+              Festival website URL
+            </label>
+            <input
+              type="text"
+              name="url"
+              className={styles.input}
+              placeholder="URL for existing festival site"
+            />
+
             <button
               type="submit"
               className="p-3 my-3 border-none rounded-lg bg-light-accent-1 text-white"
