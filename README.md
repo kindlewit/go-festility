@@ -22,11 +22,14 @@ which should start the server
 ## Run on Docker
 Run the following in the root dir of the project
 <pre>
-# BUILD THE IMAGE
+ # BUILD THE IMAGE
 docker build -t festility .
 
 # RUN THE CONTAINER
-docker run -it -p 8080:8080 festility
+docker run --rm -it -p 8080:8080 festility
+
+# RUN WITH DOCKER COMPOSE
+docker-compose up --build
 </pre>
 
 You're welcome, future me.
@@ -38,3 +41,9 @@ You're welcome, future me.
 ```
 docker run -d -p 27017:27017 mongo
 ```
+Connect & interact with the database through the terminal by the command
+```
+docker exec -it <container_name> mongosh
+```
+
+## Why not follow a microservice architecture?

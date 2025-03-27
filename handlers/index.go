@@ -1,39 +1,38 @@
 package handlers
 
 import (
-  "time"
-  "net/http"
+	"net/http"
+	"time"
 
-  "github.com/gin-gonic/gin"
-  "github.com/kindlewit/go-festility/services"
-  "github.com/kindlewit/go-festility/constants"
+	"github.com/gin-gonic/gin"
+	"github.com/kindlewit/go-festility/constants"
+	"github.com/kindlewit/go-festility/services"
 )
 
 // Handles requests to index (/) endpoint.
 // The purpose of this endpoint is to ensure if the server is working,
 // and if the necessary services are up & running.
-func IndexHandler(c *gin.Context) {
-  // Check connection to database
-  client := services.Connect();
-  defer services.Disconnect(client);
+func HandleIndex(c *gin.Context) {
+	// Check connection to database
+	timestamp := time.Now().Unix()
+	success := services.StatusCheck()
 
-  var resp gin.H;
+	var resp gin.H
 
-  _, err := services.GetFestival(client, "123");
-  if (err != nil && err.Error() == constants.ErrConnection.Error()) {
-    // Failed to connect to DB
-    resp = gin.H {
-      "timestamp": time.Now().Unix(),
-      "success": false,
-      "message": err.Error(),
-    };
-  } else {
-    resp = gin.H{
-      "timestamp": time.Now().Unix(),
-      "success": true,
-      "message": "Welcome to festility!",
-    }
-  }
+	if !success {
+		// Failed to connect to DB
+		resp = gin.H{
+			"timestamp": timestamp,
+			"success":   false,
+			"message":   constants.MsgDatabaseFailure,
+		}
+	} else {
+		resp = gin.H{
+			"timestamp": timestamp,
+			"success":   true,
+			"message":   "Welcome to festility!",
+		}
+	}
 
-  c.JSON(http.StatusOK, resp);
+	c.JSON(http.StatusOK, resp)
 }

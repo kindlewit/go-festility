@@ -19,14 +19,6 @@ type PathProp = {
 export default function Home(props: { data: SlotStruct[] }) {
   const hoursDisplay = Array.from({ length: 24 }).map(
     (v: unknown, i: number) => {
-      // if (i < 9) {
-      //   // Temporarily no slots before 9 am
-      //   return (
-      //     <div key={i} className={styles.flex_item}>
-      //       {i + ":00"}
-      //     </div>
-      //   );
-      // }
       return (
         <div key={i} className={styles.flex_item}>
           {i + ":00"}
@@ -35,8 +27,8 @@ export default function Home(props: { data: SlotStruct[] }) {
     }
   );
 
-  let slotData = props.data.map((d) => (
-    <section>
+  let slotData = props.data.map((d, i) => (
+    <section key={i}>
       <SlotCard {...d} />
     </section>
   ));

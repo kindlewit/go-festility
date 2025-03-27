@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+  db:
+    image: mongo:latest
+    container_name: mongo_festility
+    restart: always
+    volumes:
+      - festility_data:/data/db
+    ports:
+      - 27017:27017
+
+  festility:
+    image: festility
+    env_file: .env.sample # contains API secret
+    environment:
+      MONGO_URI: "mongodb://db:27017"
+    depends_on:
+      - db
+    container_name: server_festility
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+
+volumes:
+  festility_data:
+    external: true

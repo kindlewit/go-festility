@@ -19,7 +19,7 @@ async function fetchMovieData(slot: TempSlotStruct) {
       ...slot,
       title: json.title,
       duration: json.runtime,
-      year: json.release_date.match(/\d{4}/gi)[0],
+      year: json.release_date?.match(/\d{4}/gi) && json.release_date?.match(/\d{4}/gi)[0],
     };
   }
   return slot;

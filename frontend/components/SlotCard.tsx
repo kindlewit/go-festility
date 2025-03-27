@@ -45,6 +45,8 @@ const SlotCard: FC<SlotStruct> = (slot): ReactElement => {
   };
 
   let concatDirectors = slot?.directors?.join(" \u2022 ");
+  let leftPosition = `calc(${slotPosForCss.x} * var(--time-swimline-width))`
+  let widthPosition = `calc(${slot.duration / 60} * var(--time-swimline-width))`;
 
   return (
     <div
@@ -52,8 +54,8 @@ const SlotCard: FC<SlotStruct> = (slot): ReactElement => {
       style={{
         position: "absolute",
         top: slotPosForCss.y,
-        left: `calc(${slotPosForCss.x} * var(--time-swimline-width))`,
-        width: `calc(${slot.duration / 60} * var(--time-swimline-width))`,
+        left: leftPosition,
+        width: widthPosition,
       }}
     >
       <div className={styles.slot_details}>
@@ -66,7 +68,7 @@ const SlotCard: FC<SlotStruct> = (slot): ReactElement => {
         </span>
         <span className={styles.slot__director}>{concatDirectors}</span>
         <span className={styles.slot__director}>{slot.screen_name}</span>
-        <span className={styles.slot__duration}>{slot.duration}'</span>
+        <span className={styles.slot__duration}>{slot.duration}&apos;</span>
       </div>
     </div>
   );

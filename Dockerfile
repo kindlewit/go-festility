@@ -6,13 +6,12 @@ WORKDIR /app
 COPY go.mod ./
 
 COPY go.sum ./
-
+RUN go mod tidy
+RUN go mod vendor
 RUN go get -d -v ./...
 RUN go install -v ./...
 
 COPY . ./
-
-RUN "ls"
 
 RUN go build -o /dist
 

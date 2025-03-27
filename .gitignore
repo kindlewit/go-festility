@@ -1,8 +1,10 @@
 # ENV
-.env
+.env*
+!.env.SAMPLE
 
 # BUILD FILES & FOLDERS
 bin/*
+vendor/
 fest-slotter
 festility
 go-festility
