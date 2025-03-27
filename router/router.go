@@ -7,22 +7,23 @@ import (
 
 // Helps bind the API path routes to the appropriate handlers.
 func SetupRouter(router *gin.Engine) {
-	router.GET("/", handlers.IndexHandler)
+	// router.GET("/", handlers.HandleIndex)
 
-	router.GET("/movie/:id", handlers.GetMovieHandler)
+	router.GET("/movie/:id", handlers.HandleGetMovie)
 
-	router.POST("/fest", handlers.CreateFestivalHandler)
-	router.GET("/fest/:id", handlers.GetFestHandler)
+	router.POST("/fest", handlers.HandleCreateFest)
+	router.GET("/fest", handlers.HandleGetBulkFestivals)
+	router.GET("/fest/:id", handlers.HandleGetFest)
 
-	router.GET("/fest/:id/screen", handlers.GetFestScreensHandler)
+	// router.GET("/fest/:id/screen", handlers.HandleGetFestScreens)
 
-	router.POST("/fest/:id/schedule", handlers.CreateScheduleHandler)
-	router.GET("/fest/:id/schedule", handlers.GetDailyScheduleHandler)
-	router.GET("/fest/:id/schedule/:sid", handlers.GetScheduleHandler)
+	router.POST("/fest/:id/schedule", handlers.HandleCreateSchedule)
+	router.GET("/fest/:id/schedule", handlers.HandleGetDailySchedule)
+	router.GET("/fest/:id/schedule/:sid", handlers.HandleGetSchedule)
 
-	router.POST("/cinema", handlers.CreateCinemaHandler)
-	router.GET("/cinema/:id", handlers.GetCinemaHandler)
-	router.POST("/cinema/:id/screen", handlers.AddCinemaScreensHandler)
-	router.GET("/cinema/:id/screen", handlers.GetCinemaScreensHandler)
+	router.POST("/cinema", handlers.HandleCreateCinema)
+	router.GET("/cinema/:id", handlers.HandleGetCinema)
+	router.POST("/cinema/:id/screen", handlers.HandleAddCinemaScreens)
+	router.GET("/cinema/:id/screen", handlers.HandleGetCinemaScreens)
 	// Avoid return as incoming pointer.
 }

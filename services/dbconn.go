@@ -11,39 +11,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// Creates a db connection & returns it.
-func Connect() *mongo.Client {
-	var MONGO_URI = os.Getenv("MONGO_URI")
-
-	// Create context
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-
-	// Create the connection
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(MONGO_URI))
-	if err != nil {
-		panic(err)
-		// TODO: handle this situation
-	}
-
-	return client
-}
-
-// Closes the connection of a db client.
-func Disconnect(client *mongo.Client) {
-	if client == nil {
-		return
-	}
-	err := client.Disconnect(context.Background())
-	if err != nil {
-		panic(err)
-		// TODO: handle this situation
-	}
-}
-
 // Creates indexes for necessary collections.
 func Migrate() bool {
-	client := Connect()
+	client := Database.GetConnection(Database{})
 	festCollection := client.Database("festility").Collection("festival")
 	cinemaCollection := client.Database("festility").Collection("cinema")
 
@@ -78,7 +48,7 @@ func Clear(name string) bool {
 		return false
 	}
 
-	client := Connect()
+	client := Database.GetConnection(Database{})
 	collection := client.Database("festility").Collection(name) // Whichever database to clear
 
 	// Create context

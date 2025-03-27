@@ -1,5 +1,6 @@
 # ENV
-.env
+.env*
+!.env.SAMPLE
 
 # BUILD FILES & FOLDERS
 bin/*
