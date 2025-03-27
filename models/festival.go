@@ -38,3 +38,12 @@ type CustomSchedule struct {
 	Username string `bson:"username" json:"username"`
 	Schedule
 }
+
+type ScheduleApiRespWithSlots struct {
+	Id       string `bson:"id" json:"id"`
+	Fest     string `bson:"fest_id" json:"fest_id"`
+	Custom   bool   `bson:"custom" json:"custom"`
+	PrevPage string `json:"prev_page"`
+	NextPage string `json:"next_page"`
+	Slots    []Slot `json:"slots"`
+}
