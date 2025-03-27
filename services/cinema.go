@@ -102,3 +102,13 @@ func _getCinemasFromCursor(cursor *mongo.Cursor) (docs []models.Cinema, err erro
 
 	return docs, err
 }
+
+// Checks if a record already exists in db.
+func _isUnique(tableName string, query bson.M) bool {
+	count, err := db.Count(tableName, query)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+	return count < 1 // No docs matching the given query
+}
