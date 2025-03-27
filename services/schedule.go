@@ -10,13 +10,7 @@ import (
 
 // Creates new schedule.
 func CreateSchedule(data models.Schedule) (bool, error) {
-	// Ensure no other record has the same ID (duplicate)
-	query := bson.M{"id": data.Id}
-	if !_isUnique(constants.TableSchedule, query) {
-		defer db.Disconnect()
-		return false, constants.ErrDuplicateRecord // Record already present
-	}
-
+	// data.Id is already checked to be unique in handler
 	success, err := db.Insert(constants.TableSchedule, data)
 	defer db.Disconnect()
 	return success.InsertedID != nil, constants.DetermineInternalErrMsg(err)
@@ -50,12 +44,13 @@ func GetDefaultScheduleId(festId string) (string, error) {
 	return doc.Id, constants.DetermineInternalErrMsg(err)
 }
 
-// Checks if a record already exists in db.
-func _isUnique(tableName string, query bson.M) bool {
-	count, err := db.Count(tableName, query)
+func IsUniqueScheduleId(id string) bool {
+	query := bson.M{"id": id}
+
+	count, err := db.Count(constants.TableSchedule, query)
 	if err != nil {
 		fmt.Println(err)
 		return false
 	}
-	return count < 1 // No docs matching the given query
+	return count < 1
 }
