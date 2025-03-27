@@ -12,6 +12,7 @@ func SetupRouter(router *gin.Engine) {
 	router.GET("/movie/:id", handlers.HandleGetMovie)
 
 	router.POST("/fest", handlers.HandleCreateFest)
+	router.GET("/fest", handlers.HandleGetBulkFestivals)
 	router.GET("/fest/:id", handlers.HandleGetFest)
 
 	// router.GET("/fest/:id/screen", handlers.HandleGetFestScreens)

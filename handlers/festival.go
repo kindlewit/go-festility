@@ -47,6 +47,20 @@ func HandleGetFest(c *gin.Context) {
 	return
 }
 
+func HandleGetBulkFestivals(c *gin.Context) {
+	var err error
+	var resp []models.Fest
+
+	resp, err = services.GetBulkFestivals()
+	if err != nil {
+		constants.HandleError(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
+	return
+}
+
 // // Handles request to get all screens of one festival.
 // func HandleGetFestScreens(c *gin.Context) {
 // 	var err error
