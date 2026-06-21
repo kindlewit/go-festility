@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kindlewit/go-festility/router"
+	"github.com/kindlewit/go-festility/api"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,7 +26,7 @@ import (
 //	}
 func init() {
 	app = gin.Default()
-	router.SetupRouter(app)
+	api.SetupRouter(app)
 }
 
 func Test_WhenDbConnected_ShouldRetSuccess(t *testing.T) {
