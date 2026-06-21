@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/kindlewit/go-festility/api"
+	"github.com/kindlewit/go-festility/src/api"
 )
 
 func main() {
