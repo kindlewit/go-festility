@@ -72,6 +72,7 @@ This project follows a **Domain-Driven Design (DDD)** structure for the Go backe
 
 ```
 src/
+  db/             # Database connection and access module
   api/            # Gin router and all middleware
   constants/      # Shared constants (*.go)
   <domain>/       # One folder per domain (e.g. cinema, festival, movie, schedule)
