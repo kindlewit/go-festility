@@ -1,15 +1,15 @@
 package main
 
 import (
-  "github.com/gin-gonic/gin"
-  "github.com/kindlewit/go-festility/router"
+	"github.com/gin-gonic/gin"
+	"github.com/kindlewit/go-festility/api"
 )
 
 func main() {
-  app := gin.Default() // Equivalent to app in express
+	app := gin.Default() // Equivalent to app in express
 
-  // services.Migrate(); // Migrate to setup db schema
-  router.SetupRouter(app);
+	// services.Migrate(); // Migrate to setup db schema
+	api.SetupRouter(app)
 
-  app.Run() // Start the server
+	app.Run() // Start the server
 }
