@@ -1,0 +1,13 @@
+{
+  "words": [
+    "kindlewit",
+    "festility",
+    "mongodb",
+    "go-festility",
+  ],
+  "ignoreWords": [
+    "mongosh",
+    "gonic",
+    "stretchr"
+  ]
+}
